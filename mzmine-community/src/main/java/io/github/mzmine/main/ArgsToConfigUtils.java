@@ -25,18 +25,12 @@
 
 package io.github.mzmine.main;
 
-import io.github.mzmine.gui.DesktopService;
 import io.github.mzmine.gui.preferences.MZminePreferences;
 import io.github.mzmine.util.StringUtils;
 import io.github.mzmine.util.files.FileAndPathUtil;
 import io.mzio.mzmine.startup.MZmineCoreArgumentParser;
 import io.mzio.mzmine.startup.MZmineExit;
-import io.mzio.users.client.UserAuthStore;
-import io.mzio.users.gui.fx.LoginOptions;
-import io.mzio.users.gui.fx.UsersController;
-import io.mzio.users.user.CurrentUserService;
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,13 +62,13 @@ class ArgsToConfigUtils {
     applyTempDirFromConfiguration();
     TmpFileCleanup.runCleanup(); // clean temp files in new dir
 
-    checkAndOverrideArgsUser(argsParser);
+    // Saved accounts are not restored during local startup.
 
     checkAndOverrideArgsMemoryOption(argsParser);
 
     setNumThreadsOverride(argsParser);
 
-    checkAndHandleArgsUserLoginOptions(argsParser);
+    // Account-related CLI options do not gate or alter local processing.
 
     ConfigService.setIgnoreParameterWarningsInBatch(argsParser.isIgnoreParameterWarnings());
   }
@@ -90,24 +84,6 @@ class ArgsToConfigUtils {
         logger.log(Level.WARNING,
             "Cannot create or access temp file directory that was set via program argument: "
                 + tempDirectory.getAbsolutePath());
-      }
-    }
-  }
-
-  static void checkAndHandleArgsUserLoginOptions(MZmineCoreArgumentParser argsParser) {
-    final boolean isCliBatchProcessing = argsParser.getBatchFile() != null;
-
-    // login user by cli direct password
-    if (argsParser.isCliLoginPassword()) {
-      if (commandLineLogin(isCliBatchProcessing, LoginOptions.CONSOLE_ENTER_CREDENTIALS)) {
-        return;
-      }
-    }
-
-    // login user if cli option
-    if (argsParser.isCliLogin()) {
-      if (commandLineLogin(isCliBatchProcessing, LoginOptions.CONSOLE)) {
-        return;
       }
     }
   }
@@ -137,34 +113,6 @@ class ArgsToConfigUtils {
 
     // apply memory management option
     keepInMemory.enforceToMemoryMapping();
-  }
-
-  static void checkAndOverrideArgsUser(@NotNull final MZmineCoreArgumentParser argsParser) {
-    if (argsParser.getUserFile() != null) {
-      return; // user was already read and locked in MZmineCoreArgumentParser
-    }
-    if (argsParser.isGuiMode()) {
-      return; // GUI: caller will restore the user asynchronously after TaskService is ready
-    }
-    // Headless / CLI mode: restore synchronously so the user is set before the batch runs.
-    restoreUserFromConfig(ConfigService.getPreference(MZminePreferences.username));
-  }
-
-  /**
-   * Restores the previously active user identified by {@code username} by scanning all saved user
-   * files. Safe to call from any thread. May do network I/O when the user file is older than 5
-   * days.
-   */
-  static void restoreUserFromConfig(@Nullable final String username) {
-    if (!StringUtils.hasValue(username)) {
-      return;
-    }
-    try {
-      UserAuthStore.readAllUserFiles().stream().filter(u -> username.equals(u.getNickname()))
-          .findFirst().ifPresent(CurrentUserService::setUser);
-    } catch (IOException e) {
-      logger.log(Level.WARNING, "Could not restore saved user: " + username, e);
-    }
   }
 
   static void checkAndLoadArgsConfiguration(@NotNull final MZmineCoreArgumentParser argsParser) {
@@ -209,45 +157,6 @@ class ArgsToConfigUtils {
         }
       }
     }
-  }
-
-  /**
-   * @param isCliBatchProcessing
-   * @param option
-   * @return true if application finished
-   */
-  static boolean commandLineLogin(final boolean isCliBatchProcessing, LoginOptions option) {
-    boolean success = false;
-    try {
-      logger.info("CLI user login");
-      UsersController.getInstance().loginOrRegisterConsoleBlocking(option);
-      success = true;
-    } catch (Exception ex) {
-      DesktopService.getDesktop().displayMessage(
-          "Requires user login. Open mzmine GUI and login to a user. Then provide the user file as command line argument -user path/user.mzuser");
-      if (!isCliBatchProcessing) {
-        MZmineExit.exit(1);
-        return true;
-      }
-    }
-    // if no batch select - that means it was only a login call.
-    // save config and close mzmine
-    if (success && !isCliBatchProcessing) {
-      String currentUserName = CurrentUserService.getUserName().orElse("");
-      ConfigService.getPreferences().setParameter(MZminePreferences.username, currentUserName);
-      if (!ConfigService.saveUserConfig()) {
-        logger.severe(
-            "Failed to save user config after login. A solution may be to delete the .mzconfig file in the system user directory /.mzmine/");
-        MZmineExit.exit(1);
-        return true;
-      } else {
-        logger.info("User login successful, user configuration is saved with the new user "
-            + currentUserName);
-        MZmineExit.exit(0);
-        return true;
-      }
-    }
-    return false;
   }
 
   static void applyTempDirFromConfiguration() {
