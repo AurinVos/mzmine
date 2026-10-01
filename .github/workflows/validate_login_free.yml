@@ -1,0 +1,94 @@
+name: Validate login-free local runtime
+
+on:
+  push:
+    branches:
+      - validate/no-login-smoke
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Java 26
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '26.0.1'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Compile and run tests
+        run: ./gradlew -p mzmine-community test --no-daemon --stacktrace
+
+      - name: Build Linux application image
+        run: ./gradlew -p mzmine-community jpackage -x test --no-daemon --stacktrace
+
+      - name: Locate executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$(find mzmine-community/build/jpackage -type f -path '*/bin/mzmine' -perm -111 | head -n 1)"
+          test -n "$APP"
+          echo "APP=$APP" >> "$GITHUB_ENV"
+          "$APP" -help > help.log 2>&1 || {
+            cat help.log
+            exit 1
+          }
+          if grep -Eqi 'requires user login|user login required|provide .*\.mzuser' help.log; then
+            cat help.log
+            echo "Login requirement appeared during CLI help startup" >&2
+            exit 1
+          fi
+
+      - name: Headless batch smoke test without user file
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/login-free-smoke.mzbatch <<'XML'
+          <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+          <batch mzmine_version="4.10.100"/>
+          XML
+
+          set +e
+          timeout 90s "$APP" -batch /tmp/login-free-smoke.mzbatch > batch.log 2>&1
+          status=$?
+          set -e
+          cat batch.log
+          if [ "$status" -ne 0 ]; then
+            echo "Headless batch returned status $status" >&2
+            exit "$status"
+          fi
+          if grep -Eqi 'requires user login|user login required|provide .*\.mzuser|invalid user' batch.log; then
+            echo "Login enforcement appeared in headless batch output" >&2
+            exit 1
+          fi
+
+      - name: GUI startup smoke test without saved user
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb
+          rm -rf "$HOME/.mzmine"
+          set +e
+          timeout 20s xvfb-run -a "$APP" > gui.log 2>&1
+          status=$?
+          set -e
+          cat gui.log
+          if [ "$status" -ne 124 ]; then
+            echo "GUI exited before smoke-test timeout (status $status)" >&2
+            exit 1
+          fi
+          if grep -Eqi 'requires user login|user login required|provide .*\.mzuser|invalid user' gui.log; then
+            echo "Login enforcement appeared during GUI startup" >&2
+            exit 1
+          fi
