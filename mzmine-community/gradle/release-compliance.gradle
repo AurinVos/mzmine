@@ -276,10 +276,25 @@ tasks.register('correspondingSourceArchive', Zip) {
     archiveFileName = "mzmine-${project.version}-corresponding-source.zip"
     destinationDirectory = layout.buildDirectory.dir('distributions')
     // Capture current file contents including edits, excluding ignored caches and vendor tools.
-    def listing = providers.exec {
-        workingDir rootDir
-        commandLine 'git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'
-    }.standardOutput.asText
+    def listing = providers.provider {
+        if (rootProject.file('.git').exists()) {
+            return providers.exec {
+                workingDir rootDir
+                commandLine 'git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'
+            }.standardOutput.asText.get()
+        }
+        // A corresponding-source ZIP has no .git directory. It must still configure
+        // and build normally, and may create another source archive after modification.
+        return fileTree(rootDir) {
+            include '*.gradle*', 'gradle/**', 'gradlew*', 'gradle.properties', 'LICENSE.txt',
+                    'license_header*', 'README.md', 'config/**', 'convention-plugins/**',
+                    'javafx-framework/**', 'mzmine-community/**', 'taskcontroller/**',
+                    'utils/**', 'reports/**', 'external_tools/report_templates/**',
+                    'licenses/**', '.github/**'
+            exclude '**/build/**', '**/.gradle/**', '**/.idea/**', '**/bin/**', '**/out/**'
+        }.files.collect { rootDir.toPath().relativize(it.toPath()).toString().replace('\\', '/') }
+                .join('\u0000')
+    }
     from(rootDir) {
         include listing.get().split('\u0000').findAll {
             !it.startsWith('local-repo/') && !it.startsWith('open-runtime-wip/')
