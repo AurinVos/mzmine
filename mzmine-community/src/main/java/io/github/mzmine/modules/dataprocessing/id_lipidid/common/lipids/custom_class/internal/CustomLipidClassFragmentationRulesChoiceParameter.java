@@ -27,7 +27,7 @@ package io.github.mzmine.modules.dataprocessing.id_lipidid.common.lipids.custom_
 
 import io.github.mzmine.modules.dataprocessing.id_lipidid.common.identification.LipidFragmentationRule;
 import io.github.mzmine.parameters.UserParameter;
-import io.mzio.general.Result;
+import io.github.mzmine.util.Result;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;

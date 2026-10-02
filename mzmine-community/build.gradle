@@ -166,21 +166,10 @@ ext {
             ?: System.getenv("TRFP_WIN_URL")
             ?: "https://github.com/mzmine/ThermoRawFileParser/releases/download/v2.0.0-dev/ThermoRawFileParser-v.2.0.0-dev-win.zip"
 
-    // SCIEX Clearcore/Wiff2 server download. No macOS build exists.
-    // Configure in gradle.properties or via env vars to override defaults below if needed:
-    // sciex.linux.url=...
-    // sciex.win.url=...
-    sciexLinuxUrl = providers.gradleProperty("sciex.linux.url").orNull
-            ?: System.getenv("SCIEX_LINUX_URL")
-            ?: "https://github.com/mzio-public/raw-data-apis/releases/download/sciex_v1.0/Server-linux-x64.zip"
-    sciexWinUrl = providers.gradleProperty("sciex.win.url").orNull
-            ?: System.getenv("SCIEX_WIN_URL")
-            ?: "https://github.com/mzio-public/raw-data-apis/releases/download/sciex_v1.0/Server-win10-x64.zip"
 }
 
 dependencies {
     // local dependencies - publish
-    implementation(libs.bundles.mzio)
     // same project
     implementation(project(":utils"))
     implementation(project(":taskcontroller"))
@@ -816,65 +805,12 @@ tasks.register('fetchThermoRawFileParser') {
     }
 }
 
-// Linux and Windows only: fetch SCIEX Clearcore/Wiff2 server binaries and overlay
-// into external_tools/sciex_wiff2 - runs before processing resources. No macOS build.
-tasks.register('fetchSciexWiff2Server') {
-    // decision: scope up-to-date check to the OS-specific Server-* subdir, not the
-    // parent dir, because external_tools/sciex_wiff2 also holds committed launcher
-    // files (Wiff2Launcher.dll, libWiff2Launcher.so) that must not be touched.
-    final def serverSubdir = OperatingSystem.current().isWindows() ? "Server-win10-x64"
-            : OperatingSystem.current().isLinux() ? "Server-linux-x64"
-            : null
-    if (serverSubdir != null) {
-        outputs.dir(new File(layout.projectDirectory.asFile,
-                "../external_tools/sciex_wiff2/" + serverSubdir))
-    }
-    doLast {
-        if (OperatingSystem.current().isMacOsX()) {
-            logger.lifecycle("SCIEX Clearcore server: no macOS build available; skipping download")
-            return
-        }
-        final def url = OperatingSystem.current().isWindows() ? sciexWinUrl : sciexLinuxUrl
-        if (url == null || url.isBlank()) {
-            logger.lifecycle("SCIEX URL not configured; skipping download (will use repo external_tools if present)")
-            return
-        }
-
-        final def outBase = layout.buildDirectory.get().asFile
-        final def tmpDir = new File(outBase, "tmp/sciex_wiff2")
-        tmpDir.mkdirs()
-        final def zipFile = new File(tmpDir, "sciex_server.zip")
-        new URL(url).withInputStream { i -> zipFile.withOutputStream { it << i } }
-
-        final def parentDir = new File(layout.projectDirectory.asFile, "../external_tools/sciex_wiff2")
-        parentDir.mkdirs()
-
-        // decision: delete only the OS-specific Server-* subdir to preserve sibling
-        // committed files (Wiff2Launcher.dll, libWiff2Launcher.so, LICENSE).
-        final def serverDir = new File(parentDir, serverSubdir)
-        project.delete(serverDir)
-
-        // assumption: the release zip's top-level folder is Server-<os>-x64/, so
-        // extracting into parentDir restores the expected layout.
-        copy { from zipTree(zipFile); into parentDir }
-
-        // Mark Linux server binaries executable. Windows .exe needs no chmod.
-        if (OperatingSystem.current().isLinux()) {
-            serverDir.eachFileRecurse { f ->
-                if (f.isFile() && (f.name.endsWith(".so") || !f.name.contains("."))) {
-                    f.setExecutable(true)
-                }
-            }
-        }
-    }
-}
 
 // download extra resources before processing resources so that they are available to all gradle tasks
 // like test, run, jpackage
 // running in intellij will not download the resources so one manual gradle task call is needed
 tasks.named('processResources') {
     dependsOn(tasks.named('fetchThermoRawFileParser'))
-    dependsOn(tasks.named('fetchSciexWiff2Server'))
 }
 
 /*
@@ -931,7 +867,6 @@ licenseReport {
             'colt:colt', // https://dst.lbl.gov/ACSSoftware/colt/license.html (CERN license, permissive)
             'com.github.yannrichet:JMathArray', 'com.github.yannrichet:JMathPlot', 'com.github.yannrichet:JMathIO', // BSD 2-Clause
             'net.jcip:jcip-annotations', // Creative Commons Attribution License
-            'io.mzio(.*)',
             'org.openjfx.(.*)',
             'io.mzmine.reports',
     ]
@@ -1012,3 +947,41 @@ afterEvaluate {
     }
 }
 
+
+
+// Prevent proprietary runtime dependencies from returning unnoticed.
+tasks.register('verifyOpenRuntime') {
+    group = 'verification'
+    description = 'Verifies that the active runtime contains no io.mzio artifacts or imports.'
+    doLast {
+        def forbiddenArtifacts = configurations.runtimeClasspath.resolvedConfiguration
+                .resolvedArtifacts.findAll { it.moduleVersion.id.group == 'io.mzio' }
+        if (!forbiddenArtifacts.isEmpty()) {
+            throw new GradleException("Proprietary io.mzio artifacts found: ${forbiddenArtifacts}")
+        }
+        def forbiddenImports = fileTree('src/main/java') {
+            include '**/*.java', '**/*.kt'
+        }.findAll { it.text.contains('io.mzio') }
+        if (!forbiddenImports.isEmpty()) {
+            throw new GradleException("Proprietary io.mzio references found: ${forbiddenImports}")
+        }
+        def forbiddenFiles = [
+                '../local-repo/io/mzio',
+                '../external_tools/bruker_baf/baf2sql_c.dll',
+                '../external_tools/bruker_baf/libbaf2sql_c.so',
+                '../external_tools/sciex_wiff2/Wiff2Launcher.dll',
+                '../external_tools/sciex_wiff2/libWiff2Launcher.so',
+                '../external_tools/waters_raw/MLReader.dll',
+                '../external_tools/waters_raw/MassLynxRaw.dll',
+                'src/main/resources/vendorlib/bruker/timsdata_x64.dll',
+                'src/main/resources/vendorlib/bruker/libtimsdata.so'
+        ].collect { file(it) }.findAll { it.exists() }
+        if (!forbiddenFiles.isEmpty()) {
+            throw new GradleException("Proprietary binary files found: ${forbiddenFiles}")
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn(tasks.named('verifyOpenRuntime'))
+}

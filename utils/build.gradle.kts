@@ -42,7 +42,6 @@ dependencies {
     implementation(libs.commons.io)
     implementation(libs.guava)
     implementation(libs.fastutil)
-    implementation(libs.mzio.global.events)
     implementation(libs.semver4j)
 }
 

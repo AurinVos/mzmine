@@ -36,8 +36,7 @@ import io.github.mzmine.modules.io.projectload.ProjectOpeningTask;
 import io.github.mzmine.taskcontrol.SimpleRunnableTask;
 import io.github.mzmine.taskcontrol.TaskService;
 import io.github.mzmine.util.files.FileAndPathUtil;
-import io.mzio.mzmine.gui.workspace.WorkspaceMenuHelper;
-import io.mzio.users.client.UserAuthStore;
+import io.github.mzmine.gui.mainwindow.workspace.WorkspaceMenuHelper;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -56,16 +55,11 @@ class WorkspaceMenuHelperImpl extends WorkspaceMenuHelper {
 
   private static final Logger logger = Logger.getLogger(WorkspaceMenuHelperImpl.class.getName());
 
+
+
   @Override
   public void openUsersDirectory() {
-    if (!Desktop.isDesktopSupported()) {
-      return;
-    }
-    try {
-      Desktop desktop = Desktop.getDesktop();
-      desktop.open(UserAuthStore.getUserPath());
-    } catch (IOException e) {
-    }
+    // Account storage was removed from the open runtime.
   }
 
   @Override

@@ -30,10 +30,7 @@ import io.github.mzmine.modules.tools.batchwizard.WizardPartFilter;
 import io.github.mzmine.modules.tools.batchwizard.WizardSequence;
 import io.github.mzmine.modules.tools.batchwizard.builders.WizardBatchBuilder;
 import io.github.mzmine.modules.tools.batchwizard.subparameters.factories.workflows.WizardWorkflows;
-import io.mzio.users.autorisation.ServiceRestricted;
-import io.mzio.users.service.UserActiveService;
 import java.util.Map;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -42,8 +39,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * All implementations must not override their equals and hash code methods.
  */
-public abstract class WorkflowWizardParameterFactory implements WizardParameterFactory,
-    ServiceRestricted {
+public abstract class WorkflowWizardParameterFactory implements WizardParameterFactory {
 
   public static WorkflowWizardParameterFactory[] values() {
     return WizardWorkflows.values();
@@ -74,6 +70,4 @@ public abstract class WorkflowWizardParameterFactory implements WizardParameterF
   public abstract @NotNull WizardBatchBuilder getBatchBuilder(@NotNull final WizardSequence steps)
       throws UnsupportedOperationException;
 
-  @Override
-  public abstract @NotNull Set<@NotNull UserActiveService> getUnlockingServices();
 }

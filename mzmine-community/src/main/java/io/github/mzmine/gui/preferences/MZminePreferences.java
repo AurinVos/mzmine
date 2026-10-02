@@ -71,7 +71,6 @@ import io.github.mzmine.util.web.ProxyUtils;
 import io.github.mzmine.util.web.proxy.FullProxyConfig;
 import io.github.mzmine.util.web.proxy.ManualProxyConfig;
 import io.github.mzmine.util.web.proxy.ProxyConfigOption;
-import io.mzio.users.gui.fx.UsersController;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Collection;
@@ -533,13 +532,6 @@ public class MZminePreferences extends SimpleParameterSet {
     updateSystemProxySettings();
     updateGuiFormat();
     darkModeProperty.set(getThemeConfig().isDark());
-    String username = ConfigService.getPreference(MZminePreferences.username);
-    // this will set the current user to CurrentUserService
-    // loads all users already logged in from the user folder
-    if (StringUtils.hasValue(username)) {
-      UsersController.getInstance().setCurrentUserByName(username);
-    }
-
     // no way to know if the parameter was actively deselected by user
     // therefore no way to activate this parameter automatically
     // only activate for macOS as macOS needs external for now

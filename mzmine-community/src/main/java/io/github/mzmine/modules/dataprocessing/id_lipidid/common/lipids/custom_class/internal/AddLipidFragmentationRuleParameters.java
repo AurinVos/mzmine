@@ -8,7 +8,7 @@ import io.github.mzmine.modules.dataprocessing.id_lipidid.common.lipids.LipidAnn
 import io.github.mzmine.parameters.impl.SimpleParameterSet;
 import io.github.mzmine.parameters.parametertypes.ComboParameter;
 import io.github.mzmine.parameters.parametertypes.StringParameter;
-import io.mzio.general.Result;
+import io.github.mzmine.util.Result;
 import java.util.Collection;
 import java.util.logging.Logger;
 

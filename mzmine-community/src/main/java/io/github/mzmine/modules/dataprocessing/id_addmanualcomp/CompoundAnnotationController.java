@@ -36,7 +36,6 @@ import io.github.mzmine.javafx.mvci.FxViewBuilder;
 import io.github.mzmine.main.ConfigService;
 import io.github.mzmine.modules.visualization.featurelisttable_modular.FeatureTableFX;
 import io.github.mzmine.util.annotations.ConnectedTypeCalculation;
-import io.mzio.users.user.CurrentUserService;
 import java.util.List;
 import javafx.collections.ObservableMap;
 import javafx.scene.Scene;
@@ -85,8 +84,7 @@ public class CompoundAnnotationController extends FxController<CompoundAnnotatio
     ConnectedTypeCalculation.LIST.forEach(ctc -> ctc.calculateIfAbsent(row, annotation));
 
     annotation.put(DataTypes.get(DatabaseNameType.class), "Annotated manually by %s".formatted(
-        CurrentUserService.getUser() != null ? CurrentUserService.getUser().getNickname()
-            : "unknown user."));
+        System.getProperty("user.name", "unknown user")));
 
     ManualCompoundAnnotationModule.annotate(row, List.of(annotation), true);
     if (featureTable != null) {

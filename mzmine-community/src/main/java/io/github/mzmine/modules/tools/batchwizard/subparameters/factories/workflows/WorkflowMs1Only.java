@@ -7,7 +7,6 @@ import io.github.mzmine.modules.tools.batchwizard.builders.WizardBatchBuilder;
 import io.github.mzmine.modules.tools.batchwizard.subparameters.WizardStepParameters;
 import io.github.mzmine.modules.tools.batchwizard.subparameters.WorkflowWizardParameters;
 import io.github.mzmine.modules.tools.batchwizard.subparameters.factories.WorkflowWizardParameterFactory;
-import io.mzio.users.service.UserActiveService;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
@@ -43,8 +42,5 @@ public class WorkflowMs1Only extends WorkflowWizardParameterFactory {
     throw new UnsupportedWorkflowException(steps);
   }
 
-  @Override
-  public @NotNull Set<@NotNull UserActiveService> getUnlockingServices() {
-    return EnumSet.allOf(UserActiveService.class);
-  }
+
 }

@@ -40,7 +40,7 @@ import static io.github.mzmine.util.web.ProxySystemVar.TYPE;
 import io.github.mzmine.util.web.proxy.FullProxyConfig;
 import io.github.mzmine.util.web.proxy.ManualProxyConfig;
 import io.github.mzmine.util.web.proxy.ProxyConfigOption;
-import io.mzio.events.EventService;
+import io.github.mzmine.event.EventService;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;

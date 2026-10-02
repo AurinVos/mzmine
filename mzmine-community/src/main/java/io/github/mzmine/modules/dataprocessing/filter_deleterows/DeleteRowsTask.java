@@ -38,7 +38,6 @@ import io.github.mzmine.parameters.ParameterSet;
 import io.github.mzmine.taskcontrol.AbstractFeatureListTask;
 import io.github.mzmine.util.FeatureListUtils;
 import io.github.mzmine.util.MemoryMapStorage;
-import io.mzio.users.user.CurrentUserService;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,7 +125,7 @@ public class DeleteRowsTask extends AbstractFeatureListTask {
   protected void addAppliedMethod() {
     final SimpleFeatureListAppliedMethod appliedMethod = new SimpleFeatureListAppliedMethod(
         "Manually deleted by user %s".formatted(
-            CurrentUserService.getUserName().orElse("NOT LOGGED IN")), getModuleClass(),
+            System.getProperty("user.name", "local")), getModuleClass(),
         getParameters(), moduleCallDate);
     for (final var flist : getProcessedFeatureLists()) {
       flist.addDescriptionOfAppliedTask(appliedMethod);

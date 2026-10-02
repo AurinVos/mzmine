@@ -57,7 +57,7 @@ import io.github.mzmine.parameters.dialogs.ParameterSetupPane;
 import io.github.mzmine.parameters.parametertypes.filenames.FileNamesComponent;
 import io.github.mzmine.parameters.parametertypes.filenames.LastFilesButton;
 import io.github.mzmine.util.ExitCode;
-import io.mzio.links.MzioMZmineLinks;
+import io.github.mzmine.util.web.MZmineLinks;
 import java.io.File;
 import java.text.MessageFormat;
 import java.time.LocalDate;
@@ -486,7 +486,7 @@ public class BatchWizardTab extends SimpleTab {
 
     final ButtonBase help = FxIconUtil.newIconButton(FxIcons.QUESTIONMARK, 50,
         "Open the mzwizard documentation", () -> DesktopService.getDesktop()
-            .openWebPage(MzioMZmineLinks.WIZARD_DOCUMENTATION.getUrl()));
+            .openWebPage(MZmineLinks.WIZARD_DOCUMENTATION.getUrl()));
     VBox topRightControls = FxLayout.newVBox(Pos.CENTER_RIGHT, FxLayout.DEFAULT_PADDING_INSETS,
         help/*, advancedToggle*/);
     topRightControls.setPickOnBounds(false);

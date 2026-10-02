@@ -49,7 +49,7 @@ import io.github.mzmine.taskcontrol.utils.TaskResultSummary.ErrorMessageHandling
 import io.github.mzmine.taskcontrol.utils.TaskUtils;
 import io.github.mzmine.util.FeatureListUtils;
 import io.github.mzmine.util.MemoryMapStorage;
-import io.mzio.links.MzioMZmineLinks;
+import io.github.mzmine.util.web.MZmineLinks;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -246,7 +246,7 @@ class MultiThreadPeakFinderMainTask extends AbstractTask {
                   such as increased minimum height, chromatographic threshold, and feature top/edge ratio in the local minimum resolver.
                   When working on large datasets, consult the performance documentation for tuning options:
                   """.formatted(totalRows, numRaws, totalFeatures)),
-              FxTexts.hyperlinkText(MzioMZmineLinks.PERFORMANCE_DOCU.getUrl())));
+              FxTexts.hyperlinkText(MZmineLinks.PERFORMANCE_DOCU.getUrl())));
     }
   }
 
