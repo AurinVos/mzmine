@@ -39,7 +39,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
  */
 @TestInstance(Lifecycle.PER_CLASS)
 //@TestMethodOrder(OrderAnnotation.class)
-@Disabled // disable online w/o raw file parser
+@Disabled("Requires an independently installed ThermoRawFileParser and vendor raw test data; neither is bundled")
 //@DisabledOnOs(OS.MAC)
 public class ThermoRawImportTest extends AbstractDataImportTest {
 

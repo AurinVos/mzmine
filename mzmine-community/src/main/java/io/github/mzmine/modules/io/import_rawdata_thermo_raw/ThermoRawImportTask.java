@@ -41,7 +41,6 @@ import io.github.mzmine.taskcontrol.AbstractTask;
 import io.github.mzmine.taskcontrol.TaskStatus;
 import io.github.mzmine.util.MemoryMapStorage;
 import io.github.mzmine.util.exceptions.ExceptionUtils;
-import io.github.mzmine.util.files.FileAndPathUtil;
 import java.io.File;
 import java.io.InputStream;
 import java.time.Instant;
@@ -103,7 +102,6 @@ public class ThermoRawImportTask extends AbstractTask implements RawDataImportTa
     try {
       final ProcessBuilder builder = createProcessFromThermoFileParser();
       if (builder == null) {
-        error("Unable to create thermo parser from MSConvert or the ThermoRawFileParser.");
         return;
       }
 
@@ -234,27 +232,21 @@ public class ThermoRawImportTask extends AbstractTask implements RawDataImportTa
   private File getParserPathForOs() {
     final Optional<File> prefPath = ConfigService.getPreferences()
         .getOptionalValue(MZminePreferences.thermoRawFileParserPath);
-    if (prefPath.isPresent()) {
-      return prefPath.get();
-    }
-
-    File parserDirectory = FileAndPathUtil.resolveInExternalToolsDir("thermo_raw_file_parser/");
-    if (!parserDirectory.exists()) {
+    if (prefPath.isEmpty()) {
       throw new IllegalStateException(
-          "ThermoRawFileParser directory not found. When running from the IDE run gradle build or gradle test before to download the thermo raw file parser to the external_tools directory."
-              + "Expected one of: '<app>/external_tools/thermo_raw_file_parser/', 'external_tools/thermo_raw_file_parser/', '../external_tools/thermo_raw_file_parser/'.");
+          "Thermo .raw import requires a separately installed ThermoRawFileParser, supplied under its own license terms. "
+              + "Enable 'Thermo raw file parser location' in Preferences and select its executable, "
+              + "or convert the data to mzML with an independently installed converter and import the mzML file.");
     }
-
-    if (Platform.isWindows()) {
-      return new File(parserDirectory, "ThermoRawFileParser.exe");
+    final File parserPath = prefPath.get();
+    if (!parserPath.isFile() || !parserPath.canRead()
+        || (!Platform.isWindows() && !parserPath.canExecute())) {
+      throw new IllegalStateException(
+          "ThermoRawFileParser executable is missing or cannot be executed: " + parserPath
+              + ". Select the executable from a separately installed converter in Preferences, "
+              + "or import an mzML file converted outside MZmine.");
     }
-    if (Platform.isLinux() || Platform.isMac()) {
-      // both platforms have different runners but the same file name
-      // mzmine >4.8.0 download only the matching dependency now
-      return new File(parserDirectory, "ThermoRawFileParser");
-    }
-    throw new IllegalStateException(
-        "Invalid operating system for parsing thermo files via the ThermoRawFileParser.");
+    return parserPath;
   }
 
   @Override

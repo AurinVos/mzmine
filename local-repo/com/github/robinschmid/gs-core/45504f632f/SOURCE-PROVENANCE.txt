@@ -1,0 +1,13 @@
+Artifact: com.github.robinschmid:gs-core:45504f632f
+Binary SHA-256: 3696166991c99e772d92dd3246df45773c55079374dda60075d6a9ec438845c6
+Repository: https://github.com/robinschmid/gs-core
+Commit: 45504f632f41f5c84bdc4ff451716acb5a2e7a29
+Source archive: gs-core-45504f632f-source.zip
+Source SHA-256: a997e42ee45f6d3987a4ef57e5f2a07b78e70907f9141aedc14bcf8a52d6734a
+The archive contains all tracked source, test, build, license, and documentation files.
+It was produced with git archive of the full commit above, without modification.
+The POM identifies the binary version using this commit's 10-character prefix.
+The project COPYING grants LGPL version 3 or later OR CeCILL-C; this distribution
+selects LGPL version 3. Preserve all upstream notices and offer this source alongside
+the unmodified dependency jar. The bundled POM supplies its Maven build instructions.
+The fork preserves a fix for GraphML parsing (NumberFormatException).

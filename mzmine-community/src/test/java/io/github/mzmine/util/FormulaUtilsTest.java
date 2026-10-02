@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.FieldSource;
@@ -117,7 +116,7 @@ class FormulaUtilsTest {
 
       logger.info(it + " " + FormulaUtils.getFormulaString(glucose));
       // 2M and 3M types multiply the neutral mass
-      Assert.assertEquals(
+      assertEquals(
           Math.abs((neutralMass * it.getNumMol() + it.getAddedMass()) / it.getCharge()),
           FormulaUtils.calculateMzRatio(glucose), 0.0000001d);
     }

@@ -29,7 +29,6 @@ import io.github.mzmine.modules.visualization.projectmetadata.ProjectMetadataCol
 import io.github.mzmine.util.date.DateTimeUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import junit.framework.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +72,9 @@ public final class DateMetadataColumn extends MetadataColumn<LocalDateTime> {
     }
     // checks many different formats
     final LocalDateTime parsed = DateTimeUtils.parse(input.trim());
-    Assert.assertNotNull(parsed); // need to throw exception if null
+    if (parsed == null) {
+      throw new DateTimeParseException("Cannot parse date and time", input, 0);
+    }
     return parsed;
   }
 

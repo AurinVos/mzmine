@@ -1,0 +1,108 @@
+Evidence for dependency-license normalization
+
+com.sun.xml.bind:jaxb-core:2.3.0.1
+Exact sources: https://repo.maven.apache.org/maven2/com/sun/xml/bind/jaxb-core/2.3.0.1/jaxb-core-2.3.0.1-sources.jar
+SHA-256: d628f0d4d24e5a89842a81533da9f5eb4dd7c9bd5e2321c3ded3785e3f28a65f
+The POM and Java sources declare GPL version 2 only OR CDDL and explicitly
+provide the Oracle Classpath exception. This distribution selects GPLv2 with
+the Classpath exception for the unmodified dependency jar. The normalization
+is restricted to this exact module version, not the generic CDDL+GPL label.
+Example: com/sun/istack/Builder.java, header lines 6-21.
+
+org.postgresql:postgresql:9.3-1102-jdbc41
+Upstream tag: REL9_3_1102
+Commit: 820d560ff5ade8cd63083339d23b655ba5def6a7
+License: https://github.com/pgjdbc/pgjdbc/blob/820d560ff5ade8cd63083339d23b655ba5def6a7/LICENSE
+That exact historical release uses BSD-3-Clause (including non-endorsement).
+Current pgJDBC releases use BSD-2-Clause, which must not be applied retroactively.
+Exact release LICENSE SHA-256: 58d0d937c147bdee52fd9c529e7dc7d5c56182266742032cf0e36c89900de19a
+
+com.miglayout:miglayout:3.7.4
+Sources: https://repo.maven.apache.org/maven2/com/miglayout/miglayout/3.7.4/miglayout-3.7.4-sources.jar
+net/miginfocom/swing/MigLayout.java contains BSD-3-Clause terms, including
+non-endorsement. Its POM's Debian BSD license URL is normalized to BSD-3-Clause.
+
+com.github.virtuald:curvesapi:1.06
+POM: https://repo.maven.apache.org/maven2/com/github/virtuald/curvesapi/1.06/curvesapi-1.06.pom
+The POM says BSD License and links specifically to BSD-3-Clause. It is not 0BSD.
+
+org.openscience.cdk:*:2.11
+Released version: https://github.com/cdk/cdk/releases/tag/cdk-2.11
+POM: https://repo.maven.apache.org/maven2/org/openscience/cdk/cdk/2.11/cdk-2.11.pom
+The parent POM grants LGPL 2.1 or later; the report preserves that version choice.
+Released Maven source classifiers replace locally built 2.12-SNAPSHOT binaries
+whose exact source commit was not recorded. cdk-standard 2.11 sources confirm
+Aromaticity.Model.Daylight and Aromaticity.apply remain available.
+
+The normalizer's modulePattern is an independent OR match, not an additional
+constraint on other fields. Exact module rules therefore contain modulePattern
+alone with literal dots escaped, preventing accidental generic-name overrides.
+
+org.jfree:jfreechart:1.5.3 and org.jfree:org.jfree.chart.fx:2.0.1
+Exact Maven Central source classifiers contain LGPL 2.1 or later headers in
+org/jfree/chart/JFreeChart.java and org/jfree/chart/fx/ChartViewer.java.
+Their generic GNU LGPL POM wording/URL must not be interpreted as LGPL3-only.
+Exact module-version rules preserve the actual source grant.
+
+com.github.yannrichet:JMathArray:1.0, JMathIO:1.0, JMathPlot:1.0.1
+Primary maintainers' repositories explicitly grant BSD-2-Clause:
+https://github.com/yannrichet/jmatharray/blob/388afb3e3b05dde44049b3c898bcdd296d53e4d2/LICENSE
+https://github.com/yannrichet/jmathio/blob/14b834605fb247a73f79d79437a9d514205cd4a2/LICENSE
+https://github.com/yannrichet/jmathplot/blob/2938687e601c7f6782e8200ea991c6f160c13917/LICENSE
+All 19 JMathArray and all 12 JMathIO Java files in exact Maven source jars
+match these repositories, ignoring line-ending differences. JMathPlot's POM
+still declares 1.0.1, and the same maintainers' grant covers that library.
+Preserve additional embedded notices: JMathArray RngPackLICENSE is BSD3;
+JMathPlot org/math/plot/utils/FastMath.java and NumbersUtils.java are Apache2,
+and FastMath.java includes the permissive Sun fdlibm attribution notice.
+
+org.openjfx:javafx-*:26
+Exact javafx-base-26-sources.jar published on Maven Central has GPL2-only
+with Classpath exception source headers, e.g. javafx/beans/Observable.java.
+Exact OpenJFX version and module list are normalized, without blanket exclusions.
+
+Removed Colt and JCIP
+Colt1.2.0 license: https://dst.lbl.gov/ACSSoftware/colt/license.html
+The CERN portion is permissive, but bundled hep.aida.* forbids military use.
+There are no cern/ or hep/aida/ bytecode references across all 278 installed
+runtime jars excluding Colt (build/license-audit/colt-bytecode-reference-scan.txt).
+Exact gs-algo2.0 sources also contain no Colt references. No active MZmine
+Java sources reference cern.*, hep.aida.*, or net.jcip annotations.
+net.jcip:jcip-annotations:1.0 declares Creative Commons Attribution without
+specifying the version. Removing this unused runtime artifact avoids inventing
+a precise grant. Do not exclude either artifact merely from license reporting.
+
+org.jdom:jdom2:2.0.4
+The exact binary jar's LICENSE.txt and the POM license comment contain the
+custom JDOM grant, with preservation, non-endorsement and name restrictions,
+and an OPTIONAL acknowledgement. It is not Apache License 1.1 and should
+not be mapped to that GPL-incompatible license. The actual notice is preserved
+in licenses/third-party/JDOM-2.0.4-LICENSE.txt. The GPLv3 distribution retains
+these trademark/name restrictions in accordance with GPLv3 section 7(e).
+Primary explanation: https://www.jdom.org/docs/faq.html
+
+org.openjfx:jdk-jsobject:26
+Exact published jdk-jsobject-26-sources.jar contains
+netscape/javascript/JSObject.java with GPL2-only + Classpath exception headers.
+This module moved out of JDK26 and is now supplied through OpenJFX; its exact
+module normalization reflects its actual license grant.
+
+Removed Adobe XMP and JJobs source-unavailable runtime artifacts
+No de/unijena/bioinf/jjobs/ references exist across the 276 installed jars
+excluding JJobs/XMP. JJobs is not needed by the application's SIRIUS API calls.
+The only Adobe XMP reference is jasperreports-pdf7.0.3 XmpWriter, isolated behind
+PdfXmpCreator.supported(). Exact Jasper sources show Class.forName probing with
+ClassNotFoundException fallback, and ClassicPdfWriter.createXmpMetadata() uses
+OpenPDF metadata generation if Adobe is absent. Ordinary PDF exports are unaffected;
+custom PDF/A configurations fall back to OpenPDF and must not claim separately
+verified Adobe XMP metadata conformance.
+Older Adobe6.1.10/5.1.3 source jars and drewnoakes source fork contain a restrictive
+ADOBE CONFIDENTIAL notice, so they are not used as replacement source evidence.
+
+Guava empty placeholder
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+contains only META-INF Maven/manifest metadata and no .class entries.
+SHA-256: b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99
+This exact metadata-only artifact is covered by a separately verified empty-artifact
+exception in config/dependency-source-overrides.json. Runtime executable code is
+supplied by the resolved Guava library, whose exact sources are collected normally.

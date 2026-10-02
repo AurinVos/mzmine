@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '26.0.1'
+          java-version: '26.0.2.1+1'
 #          cache: 'gradle'  # now done with gradle
 
       - name: Setup Gradle
@@ -136,6 +136,13 @@ jobs:
           retention-days: 7  # store for 7 days
 
 
+      - name: Upload exact corresponding sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: mzmine_corresponding_source_${{ runner.os }}
+          path: mzmine-community/build/distributions/*-corresponding-source.zip
+          if-no-files-found: error
+          retention-days: 7
   # release dev version
   release_dev:
     name: Release version

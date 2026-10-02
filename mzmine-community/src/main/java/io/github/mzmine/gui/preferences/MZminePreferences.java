@@ -225,10 +225,11 @@ public class MZminePreferences extends SimpleParameterSet {
       false);
   public static final OptionalParameter<FileNameWithDownloadParameter> thermoRawFileParserPath = new OptionalParameter<>(
       new FileNameWithDownloadParameter("Thermo raw file parser location",
-          "This is the optional external location to overwrite the internal thermo raw file parsing default. Disable to use the internal parser. macOS currently requires mono installed and the external raw file parser (see download button on the right).",
-          List.of(new ExtensionFilter("Executable or zip", "ThermoRawFileParser.exe",
-                  "ThermoRawFileParser", "ThermoRawFileParser.zip"),
-              new ExtensionFilter("zip", "ThermoRawFileParser.zip"),
+          "Enable and select the executable of a separately installed ThermoRawFileParser to import Thermo .raw files. "
+              + "MZmine does not bundle this converter; it is supplied under its own license terms. "
+              + "The link opens the provider's website. Alternatively, convert to mzML outside MZmine and import that file.",
+          List.of(new ExtensionFilter("Executable", "ThermoRawFileParser.exe",
+                  "ThermoRawFileParser"),
               new ExtensionFilter("Windows executable", "ThermoRawFileParser.exe"),
               new ExtensionFilter("Linux / macOS executable", "ThermoRawFileParser")),
           AssetGroup.ThermoRawFileParser));

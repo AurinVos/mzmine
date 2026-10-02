@@ -31,7 +31,6 @@ import io.github.mzmine.util.spectraldb.entry.SpectralLibraryEntry;
 import io.github.mzmine.util.web.RequestResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -78,7 +77,7 @@ public class GNPSTest {
     // the description will limit the submission to a test
     RequestResponse response = GNPSUtils.submitMASSTJob("MZMINE_TEST_SUBMISSION_ADD_TEST_PART", dps,
         1044.66, MasstDatabase.ALL, 0.7, 1d, 0.5, 6, false, "", "", "", false);
-    Assert.assertEquals("Test Passed", response.response());
-    Assert.assertTrue(response.isSuccess());
+    Assertions.assertEquals("Test Passed", response.response());
+    Assertions.assertTrue(response.isSuccess());
   }
 }

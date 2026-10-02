@@ -53,7 +53,6 @@ import java.util.Random;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -79,13 +78,13 @@ public class MobilityScanTest {
     stored = StorageUtils.storeValuesToDoubleBuffer(storage, numbers);
 
     for (int i = 0; i < numbers.length; i++) {
-      Assert.assertEquals(numbers[i], stored.getAtIndex(ValueLayout.JAVA_DOUBLE, i), 0E-8);
+      Assertions.assertEquals(numbers[i], stored.getAtIndex(ValueLayout.JAVA_DOUBLE, i), 0E-8);
     }
 
     for (int i = 0; i < numbers.length; i++) {
       double[] d = new double[1];
       StorageUtils.copyToBuffer(d, stored, i, i + 1);
-      Assert.assertEquals(numbers[i], d[0], 1E-8);
+      Assertions.assertEquals(numbers[i], d[0], 1E-8);
     }
   }
 
@@ -166,15 +165,15 @@ public class MobilityScanTest {
       int numValues = mobilityScan.getNumberOfDataPoints();
 
       if (numValues != scans.get(i).getNumberOfDataPoints()) {
-        Assert.fail("Number of stored values does not match number of original values");
+        Assertions.fail("Number of stored values does not match number of original values");
       }
       double[] actualMzs = new double[numValues];
       double[] actualIntensities = new double[numValues];
       actualMzs = mobilityScan.getMzValues(actualMzs);
       actualIntensities = mobilityScan.getIntensityValues(actualIntensities);
 
-      Assert.assertArrayEquals(originalMzs, actualMzs, 1E-8);
-      Assert.assertArrayEquals(originalIntensities, actualIntensities, 1E-8);
+      Assertions.assertArrayEquals(originalMzs, actualMzs, 1E-8);
+      Assertions.assertArrayEquals(originalIntensities, actualIntensities, 1E-8);
     }
     logger.info("Mobility scan storing and loading ok.");
 

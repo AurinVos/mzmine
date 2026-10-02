@@ -8,8 +8,8 @@ licenseplugin = "2.9"
 beryx-runtime = "2.0.0"
 semver = "1.0.4"
 msdk = "0.0.27"
-# update to 2.9? from 2.5
-cdk = "2.12-SNAPSHOT"
+# Released artifacts have exact corresponding sources on Maven Central.
+cdk = "2.11"
 swagger = "1.5.22"
 okhttp = "2.7.5"
 slf4j = '2.0.17'
@@ -68,7 +68,7 @@ aalto-xml = "com.fasterxml:aalto-xml:1.3.2"
 protobuf-java = "com.google.protobuf:protobuf-java:4.33.0"
 protobuf-grpc = "io.grpc:grpc-protobuf:1.76.0"
 protobuf-grpc-stub = "io.grpc:grpc-stub:1.76.0"
-protobuf-grpc-netty = "io.grpc:grpc-netty-shaded:1.76.0"
+protobuf-grpc-netty = "io.grpc:grpc-netty:1.76.0"
 
 # chemistry
 cdk-core = { module = "org.openscience.cdk:cdk-core", version.ref = "cdk" }

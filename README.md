@@ -21,7 +21,10 @@ our [YouTube channel](https://www.youtube.com/@mzmineproject/playlists?view=1&so
 
 ## License
 
-mzmine source codes are distributed under the [MIT license](LICENSE.txt).
+This combined application is distributed under [GPL version 3](LICENSE.txt) and
+may be used for any purpose, including commercial work. Existing MIT grants and
+third-party notices are preserved. See [redistribution instructions](licenses/REDISTRIBUTION.md)
+for source and release requirements.
 
 ## Releases
 

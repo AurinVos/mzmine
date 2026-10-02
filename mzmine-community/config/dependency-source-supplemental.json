@@ -1,0 +1,25 @@
+{
+  "artifacts": [
+    {
+      "file": "batik-src-1.19.tar.gz",
+      "url": "https://archive.apache.org/dist/xmlgraphics/batik/source/batik-src-1.19.tar.gz",
+      "sha256": "dbb8fa989e1167706f55bf9d757925d4cecd43007557954ab3b23037bfff1fb8",
+      "modules": ["org.apache.xmlgraphics:batik-all:1.19"],
+      "reason": "Aggregate binary; full Apache release includes module sources and build scripts."
+    },
+    {
+      "file": "poi-ooxml-full-5.0.0-sources.jar",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-full/5.0.0/poi-ooxml-full-5.0.0-sources.jar",
+      "sha256": "3af8568eaa6122976285fb2b649637280e7d85d88d60f5fe09c2cb3a73927750",
+      "modules": ["org.apache.poi:poi-ooxml-lite:5.0.0"],
+      "reason": "Full generated OOXML schema sources include the lite subset."
+    },
+    {
+      "file": "xml-commons-external-1.3.04-src.tar.gz",
+      "url": "https://archive.apache.org/dist/xml/commons/source/xml-commons-external-1.3.04-src.tar.gz",
+      "sha256": "8e8a412aeb95644eaf14ec1a5cfd04833e38cac4a01b83d73d7de2368a35a597",
+      "modules": ["xml-apis:xml-apis-ext:1.3.04"],
+      "reason": "Exact Apache XML Commons source release includes the extension API sources."
+    }
+  ]
+}

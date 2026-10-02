@@ -28,7 +28,7 @@ package io.github.mzmine.modules.visualization.molstructure;
 import io.github.mzmine.datamodel.structures.MolecularStructure;
 import io.github.mzmine.datamodel.structures.StructureInputType;
 import io.github.mzmine.datamodel.structures.StructureParser;
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class Structure2DRendererTest {
@@ -43,14 +43,14 @@ class Structure2DRendererTest {
      String svg = renderer.drawStructureToSvgString(structure.structure(), 600, 600,
         Structure2DRenderConfig.DEFAULT_CONFIG);
 
-    Assert.assertNotNull(svg);
-    Assert.assertTrue(svg.startsWith("<svg"));
+    Assertions.assertNotNull(svg);
+    Assertions.assertTrue(svg.startsWith("<svg"));
 
 
     // render with fixed bond length and auto width and height of image
     String svg2 = renderer.drawStructureToSvgStringFixedSize(structure.structure(), Structure2DRenderConfig.DEFAULT_CONFIG);
 
-    Assert.assertNotNull(svg2);
-    Assert.assertTrue(svg2.startsWith("<svg"));
+    Assertions.assertNotNull(svg2);
+    Assertions.assertTrue(svg2.startsWith("<svg"));
   }
 }

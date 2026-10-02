@@ -49,14 +49,7 @@ public record Dependencies(List<Dependency> dependencies) {
               FileAndPathUtil.resolveInExternalToolsDir("bruker_baf/README.txt")),
           new ModuleLicense("THIRD-PARTY-LICENSE-README.txt",
               FileAndPathUtil.resolveInExternalToolsDir(
-                  "bruker_baf/THIRD-PARTY-LICENSE-README.txt")))),
-      // thermo
-      new Dependency("ThermoFisher RawFileReader", "", List.of(), List.of(
-          new ModuleLicense("SOFTWARE LICENSE AGREEMENT (“License”) FOR RawFileReader",
-              FileAndPathUtil.resolveInExternalToolsDir("thermo_raw_file_parser/THERMO_LICENSE.txt")
-                  .getAbsolutePath()))), new Dependency("Compomics ThermoRawFileParser", "",
-          List.of("https://github.com/compomics/ThermoRawFileParser"), List.of(
-          new ModuleLicense("Apache-2.0 license", "https://www.apache.org/licenses/LICENSE-2.0"))));
+                  "bruker_baf/THIRD-PARTY-LICENSE-README.txt")))));
 
   public static List<Dependency> of(String resourcePath) {
     final ObjectMapper mapper = new ObjectMapper();

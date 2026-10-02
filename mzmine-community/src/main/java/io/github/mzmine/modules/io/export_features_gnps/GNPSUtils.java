@@ -382,7 +382,7 @@ public class GNPSUtils {
   }
 
   @NotNull
-  private static RequestResponse getResponse(CloseableHttpResponse response) {
+  static RequestResponse getResponse(CloseableHttpResponse response) {
     String requestResult = "";
     try {
       HttpEntity entity = response.getEntity();

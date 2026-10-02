@@ -1,0 +1,22 @@
+name: Freely usable Windows package
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '26.0.2.1+1'
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Test and build with exact sources and notices
+        run: ./gradlew :mzmine-community:test :mzmine-community:freeUsePortable --console=plain
+      - name: Upload binary and corresponding source together
+        uses: actions/upload-artifact@v4
+        with:
+          name: mzmine-free-use-windows-with-source
+          path: mzmine-community/build/distributions/*.zip
+          if-no-files-found: error

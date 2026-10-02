@@ -1,0 +1,306 @@
+/* Release checks supplement, rather than replace, component license review. */
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.maven.MavenModule
+import org.gradle.maven.MavenPomArtifact
+import org.gradle.language.base.artifact.SourcesArtifact
+import org.gradle.jvm.JvmLibrary
+import java.security.MessageDigest
+import java.util.zip.ZipFile
+
+def forbiddenPayload = { String path ->
+    def normalized = path.replace('\\', '/').toLowerCase(Locale.ROOT)
+    normalized.tokenize('/').last() in ['mlreader.dll', 'libmlreader.so'] || normalized.matches('.*(thermo_raw_file_parser|thermorawfileparser|thermofisher|' +
+            'timsdata|baf2sql|wiff2launcher|masslynxraw|jimzmlparser|' +
+            'grpc-netty-shaded|netty-tcnative|colt-1\\.|jcip-annotations|' +
+            'junit-4\\.|json-20211205|cdk-.*-snapshot).*')
+}
+
+tasks.register('verifyDistributionContents') {
+    group = 'verification'
+    description = 'Inspects the final image and JAR entries for removed proprietary payloads.'
+    dependsOn('jpackageImage')
+    doLast {
+        def image = layout.buildDirectory.dir('jpackage').get().asFile
+        def forbidden = []
+        fileTree(image).each { f ->
+            def relative = image.toPath().relativize(f.toPath()).toString()
+            if (forbiddenPayload(relative)) forbidden.add(relative)
+            if (f.name.endsWith('.jar')) {
+                new ZipFile(f).withCloseable { zip ->
+                    zip.entries().each { entry ->
+                        if (!entry.directory && forbiddenPayload(entry.name) &&
+                                !(entry.name.startsWith('io/github/mzmine/') &&
+                                        (entry.name.endsWith('.class') || entry.name.endsWith('.java')))) {
+                            forbidden.add("${relative}!${entry.name}")
+                        }
+                    }
+                }
+            }
+        }
+        if (forbidden) throw new GradleException("Removed payloads found in image: ${forbidden}")
+        def notices = fileTree(image) { include '**/external_tools/licenses/GPL-3.0.txt' }
+        if (notices.isEmpty()) throw new GradleException('GPL license text missing from image')
+        def expected = (configurations.runtimeClasspath.files + tasks.named('jar').get().archiveFile.get().asFile)
+                .findAll { it.name.endsWith('.jar') }.collectEntries { [(it.name): it] }
+        def packaged = fileTree(image) { include '**/app/*.jar' }.files.collectEntries { [(it.name): it] }
+        if (packaged.keySet() != expected.keySet()) {
+            throw new GradleException("Packaged JARs differ from runtime: extra=${packaged.keySet() - expected.keySet()}, " +
+                    "missing=${expected.keySet() - packaged.keySet()}")
+        }
+        expected.each { name, original ->
+            def sha = { File f -> MessageDigest.getInstance('SHA-256').digest(f.bytes).encodeHex().toString() }
+            if (sha(original) != sha(packaged[name])) throw new GradleException("Packaged JAR differs: ${name}")
+        }
+        logger.lifecycle("Verified final image contents: ${image}")
+    }
+}
+
+// Resolve exact source artifacts rather than linking to a moving upstream branch.
+def sourceDir = layout.buildDirectory.dir('corresponding-source')
+def pinnedManifests = {
+    [
+        [file: rootProject.file('licenses/native-source-provenance.json'), directory: 'native'],
+        [file: file('config/dependency-source-supplemental.json'), directory: 'supplemental'],
+        [file: rootProject.file('config/dependency-source-overrides.json'), directory: 'supplemental']
+    ].findAll { it.file.isFile() }.collect { spec ->
+        [data: new JsonSlurper().parse(spec.file), directory: spec.directory, file: spec.file]
+    }
+}
+def sha256 = { File f ->
+    def digest = MessageDigest.getInstance('SHA-256')
+    f.withInputStream { stream ->
+        byte[] buffer = new byte[65536]
+        int length
+        while ((length = stream.read(buffer)) != -1) digest.update(buffer, 0, length)
+    }
+    digest.digest().encodeHex().toString()
+}
+tasks.register('fetchPinnedSources') {
+    group = 'distribution'
+    description = 'Fetches checksum-pinned complete source releases where Maven sources are incomplete.'
+    doLast {
+        pinnedManifests().each { manifest ->
+            manifest.data.artifacts.each { artifact ->
+                if (new File(artifact.file).name != artifact.file) throw new GradleException('Unsafe source filename')
+                def f = new File(sourceDir.get().asFile, "${manifest.directory}/${artifact.file}")
+                if (!f.isFile() || sha256(f) != artifact.sha256) {
+                    f.parentFile.mkdirs()
+                    def partial = new File(f.path + '.partial')
+                    new URL(artifact.url).withInputStream { stream ->
+                        partial.withOutputStream { it << stream }
+                    }
+                    if (sha256(partial) != artifact.sha256) throw new GradleException("Source checksum mismatch: ${artifact.file}")
+                    java.nio.file.Files.move(partial.toPath(), f.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                }
+            }
+            copy {
+                from manifest.file
+                into new File(sourceDir.get().asFile, manifest.directory)
+            }
+        }
+    }
+}
+def noticeDir = layout.buildDirectory.dir('component-notices')
+tasks.register('collectComponentNotices') {
+    group = 'distribution'
+    description = 'Preserves embedded component licenses, copyrights, and NOTICE files.'
+    dependsOn('checkLicense')
+    doLast {
+        def dest = noticeDir.get().asFile
+        delete dest
+        dest.mkdirs()
+        configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+            if (!artifact.file.name.endsWith('.jar')) return
+            def id = artifact.moduleVersion.id
+            def componentDir = new File(dest, "${id.group}/${id.name}/${id.version}")
+            new ZipFile(artifact.file).withCloseable { zip ->
+                zip.entries().each { entry ->
+                    if (!entry.directory && !entry.name.endsWith('.class') && !entry.name.endsWith('.java') && entry.name.toLowerCase(Locale.ROOT)
+                            .matches('.*(^|/)(license[^/]*|notice[^/]*|copying[^/]*|copyright[^/]*)$')) {
+                        componentDir.mkdirs()
+                        def output = new File(componentDir, entry.name.replace('/', '_'))
+                        zip.getInputStream(entry).withCloseable { stream ->
+                            output.withOutputStream { it << stream }
+                        }
+                    }
+                }
+            }
+        }
+        copy {
+            from layout.buildDirectory.dir('licensereport')
+            include 'licenses.json', 'licenses.html', 'licenses.csv'
+            into dest
+        }
+    }
+}
+tasks.named('stageApprovedAppContent') {
+    dependsOn('collectComponentNotices')
+    from(noticeDir) { into 'licenses/components' }
+}
+
+tasks.register('verifyNativeSources') {
+    group = 'verification'
+    description = 'Checks pinned native source/build archives against the actual Windows toolchain.'
+    dependsOn('fetchPinnedSources')
+    doLast {
+        def manifest = new JsonSlurper().parse(rootProject.file('licenses/native-source-provenance.json'))
+        def launcher = javaToolchains.launcherFor(java.toolchain).get()
+        def release = new File(launcher.metadata.installationPath.asFile, 'release')
+        def properties = new Properties()
+        release.withInputStream { properties.load(it) }
+        if (!System.getProperty('os.name').startsWith('Windows') ||
+                System.getProperty('os.arch') != 'amd64' ||
+                properties.getProperty('JAVA_RUNTIME_VERSION')?.replace('"', '') != manifest.jdk.version ||
+                properties.getProperty('IMPLEMENTOR')?.replace('"', '') != manifest.jdk.vendor) {
+            throw new GradleException('Native source manifest does not cover this toolchain/platform. Update it before release.')
+        }
+        def javafx = configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.findAll {
+            it.moduleVersion.id.group == 'org.openjfx'
+        }
+        if (javafx.any { it.moduleVersion.id.version != manifest.openjfx.version.tokenize('+')[0] }) {
+            throw new GradleException('OpenJFX source manifest does not match resolved runtime')
+        }
+        def coveredModules = manifest.artifacts.collectMany { it.modules ?: [] }.toSet()
+        configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+            if (!artifact.file.name.endsWith('.jar')) return
+            boolean nativeCode
+            new ZipFile(artifact.file).withCloseable { zip ->
+                nativeCode = zip.entries().any { entry ->
+                    !entry.directory && entry.name.toLowerCase(Locale.ROOT)
+                            .matches('.*\\.(dll|so|dylib|jnilib)(\\.[0-9]+)*$')
+                }
+            }
+            if (nativeCode && !(artifact.moduleVersion.id.toString() in coveredModules)) {
+                throw new GradleException("Native component lacks source provenance: ${artifact.moduleVersion.id}")
+            }
+        }
+        manifest.artifacts.findAll { it.required }.each { artifact ->
+            def f = new File(sourceDir.get().asFile, "native/${artifact.file}")
+            if (!f.isFile()) throw new GradleException("Missing native sources: ${f}. Run config/fetch-native-sources.ps1")
+            def digest = MessageDigest.getInstance('SHA-256')
+            f.withInputStream { stream ->
+                byte[] buffer = new byte[65536]
+                int length
+                while ((length = stream.read(buffer)) != -1) digest.update(buffer, 0, length)
+            }
+            if (digest.digest().encodeHex().toString() != artifact.sha256) {
+                throw new GradleException("Native source checksum mismatch: ${f}")
+            }
+        }
+    }
+}
+tasks.register('collectDependencySources') {
+    group = 'distribution'
+    description = 'Collects exact dependency sources and POMs; fails on missing sources.'
+    outputs.upToDateWhen { false }
+    dependsOn('fetchPinnedSources')
+    doLast {
+        def dest = sourceDir.get().asFile
+        dest.mkdirs()
+        delete new File(dest, 'dependencies')
+        def ids = configurations.runtimeClasspath.incoming.artifacts.artifacts
+                .collect { it.id.componentIdentifier }.findAll { it instanceof ModuleComponentIdentifier }.unique()
+        def result = dependencies.createArtifactResolutionQuery().forComponents(ids)
+                .withArtifacts(JvmLibrary, SourcesArtifact).execute()
+        def poms = dependencies.createArtifactResolutionQuery().forComponents(ids)
+                .withArtifacts(MavenModule, MavenPomArtifact).execute().resolvedComponents
+                .collectEntries { [(it.id): it] }
+        def manifest = []
+        def missing = []
+        result.resolvedComponents.each { component ->
+            def id = component.id
+            String coordinate = "${id.group}:${id.module}:${id.version}"
+            def sources = component.getArtifacts(SourcesArtifact).findAll {
+                it instanceof org.gradle.api.artifacts.result.ResolvedArtifactResult
+            }
+            def target = new File(dest, "dependencies/${id.group}/${id.module}/${id.version}")
+            target.mkdirs()
+            if (coordinate == 'com.github.robinschmid:gs-core:45504f632f') {
+                copy {
+                    from rootProject.file('local-repo/com/github/robinschmid/gs-core/45504f632f')
+                    into target
+                }
+                sources = fileTree(target) { include '*-source.zip' }.files
+            } else {
+                sources.each { artifact -> copy { from artifact.file; into target } }
+                (poms[component.id]?.getArtifacts(MavenPomArtifact) ?: []).findAll {
+                    it instanceof org.gradle.api.artifacts.result.ResolvedArtifactResult
+                }.each { artifact -> copy { from artifact.file; into target } }
+            }
+            if (sources.isEmpty()) {
+                def fallback = pinnedManifests().collectMany { spec ->
+                    spec.data.artifacts.findAll { coordinate in (it.modules ?: []) }.collect {
+                        new File(dest, "${spec.directory}/${it.file}")
+                    }
+                }
+                fallback.each { f -> copy { from f; into target } }
+                sources = fallback
+                def empty = pinnedManifests().collectMany { it.data.emptyArtifacts ?: [] }
+                        .find { it.module == coordinate }
+                if (empty) {
+                    def binary = configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.find {
+                        it.moduleVersion.id.toString() == coordinate
+                    }?.file
+                    if (!binary || sha256(binary) != empty.sha256) throw new GradleException("Empty artifact hash mismatch: ${coordinate}")
+                    new ZipFile(binary).withCloseable { zip ->
+                        if (zip.entries().any { it.name.endsWith('.class') }) throw new GradleException("Artifact contains code: ${coordinate}")
+                    }
+                    def evidence = new File(target, 'EMPTY-ARTIFACT.txt')
+                    evidence.text = empty.reason + '\nBinary SHA-256: ' + empty.sha256
+                    sources = [evidence]
+                }
+            }
+            if (sources.isEmpty()) missing.add(coordinate)
+            manifest.add([module: coordinate, sourceAvailable: !sources.isEmpty(),
+                    files: target.listFiles().collect { f ->
+                        [name: f.name, sha256: MessageDigest.getInstance('SHA-256')
+                                .digest(f.bytes).encodeHex().toString()]
+                    }])
+        }
+        result.components.findAll { it instanceof org.gradle.api.artifacts.result.UnresolvedComponentResult }.each {
+            missing.add(it.id.displayName + ': ' + it.failure.message)
+        }
+        new File(dest, 'dependency-source-manifest.json').text =
+                JsonOutput.prettyPrint(JsonOutput.toJson(manifest))
+        new File(dest, 'missing-sources.txt').text = missing.sort().join('\n')
+        if (missing) throw new GradleException("Missing dependency sources; see ${dest}/missing-sources.txt")
+    }
+}
+
+tasks.register('correspondingSourceArchive', Zip) {
+    group = 'distribution'
+    description = 'Archives current application source, build scripts and exact dependency sources.'
+    dependsOn('collectDependencySources', 'verifyNativeSources', 'copyLicenseInformationToResources')
+    archiveFileName = "mzmine-${project.version}-corresponding-source.zip"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    // Capture current file contents including edits, excluding ignored caches and vendor tools.
+    def listing = providers.exec {
+        workingDir rootDir
+        commandLine 'git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'
+    }.standardOutput.asText
+    from(rootDir) {
+        include listing.get().split('\u0000').findAll {
+            !it.startsWith('local-repo/') && !it.startsWith('open-runtime-wip/')
+        }
+        into 'mzmine'
+    }
+    from(rootProject.file('local-repo/com/github/robinschmid/gs-core/45504f632f')) {
+        into 'mzmine/local-repo/com/github/robinschmid/gs-core/45504f632f'
+    }
+    from(sourceDir) { into 'third-party-sources' }
+}
+
+// Every installer path must pass content and source checks before it can be released.
+tasks.named('jpackage') {
+    dependsOn('verifyDistributionContents', 'correspondingSourceArchive')
+}
+tasks.register('freeUsePortable', Zip) {
+    group = 'distribution'
+    description = 'Builds the verified portable application; publish with its matching source archive.'
+    dependsOn('verifyDistributionContents', 'correspondingSourceArchive')
+    archiveFileName = "mzmine-${project.version}-${project.ext.osSuffix}-free-use-portable.zip"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    from(layout.buildDirectory.dir('jpackage/mzmine')) { into 'mzmine' }
+}

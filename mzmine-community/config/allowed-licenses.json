@@ -4,7 +4,7 @@
       "moduleLicense": "Mozilla Public License, Version 2.0"
     },
     {
-      "moduleLicense": "Apache Software License, Version 1.1"
+      "moduleLicense": "JDOM License"
     },
     {
       "moduleLicense": "Apache License, Version 2.0"
@@ -20,9 +20,6 @@
     },
     {
       "moduleLicense": "GNU GENERAL PUBLIC LICENSE, Version 2 + Classpath Exception"
-    },
-    {
-      "moduleLicense": "CDDL+GPL License"
     },
     {
       "moduleLicense": "The 3-Clause BSD License"
@@ -46,22 +43,19 @@
       "moduleLicense": "Eclipse Distribution License - v 1.0"
     },
     {
-      "moduleLicense": "Eclipse Public License - v 1.0"
-    },
-    {
-      "moduleLicense": "Eclipse Public License - v 2.0"
-    },
-    {
       "moduleLicense": "PUBLIC DOMAIN"
     },
     {
       "moduleLicense": "Mulan PSL v2"
     },
     {
-      "moduleLicense": "The JSON License"
+      "moduleLicense": "MIT No Attribution"
     },
     {
-      "moduleLicense": "Common Public License Version 1.0"
+      "moduleLicense": "GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1 or later"
+    },
+    {
+      "moduleLicense": "Creative Commons Legal Code"
     }
   ]
 }

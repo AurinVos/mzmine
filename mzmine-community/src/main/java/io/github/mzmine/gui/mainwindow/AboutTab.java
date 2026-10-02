@@ -31,6 +31,9 @@ import io.github.mzmine.main.MZmineCore;
 import io.github.mzmine.util.io.SemverVersionReader;
 import io.github.mzmine.util.javafx.LightAndDarkModeIcon;
 import io.github.mzmine.util.web.MZmineLinks;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -71,12 +74,21 @@ public class AboutTab extends SimpleTab {
     Hyperlink privacyPolicy = FxLabels.newWebHyperlink(MZmineLinks.PRIVACY_POLICY.getUrl());
     contentBox.getChildren().add(privacyPolicy);
 
-    // Terms and conditions
-    //TODO add to mzio links
-    contentBox.getChildren().add(FxLabels.newBoldLabel("Terms and Conditions"));
-    Hyperlink legalInfo = FxLabels.newWebHyperlink(
-        MZmineLinks.TERMS_CONDITIONS.getUrl()); // Assuming you're updating this
-    contentBox.getChildren().add(legalInfo);
+    contentBox.getChildren().add(FxLabels.newBoldLabel("Application License"));
+    Label applicationLicense = FxLabels.newLabel(
+        "The combined application is distributed under GNU GPL version 3. "
+            + "You may use it for any purpose, including commercial work. "
+            + "Private use and internal modifications do not require publishing source; "
+            + "redistribution must comply with the GPL, including corresponding-source obligations. "
+            + "There is no warranty. Original MIT grants and third-party licenses remain in effect. "
+            + "Independently installed vendor converters have their own terms.");
+    applicationLicense.setMaxWidth(700);
+    contentBox.getChildren().add(applicationLicense);
+    contentBox.getChildren().add(FxLabels.newHyperlink(
+        () -> showLicense("GNU GPL version 3", "GPL-3.0.txt"), "Read GPL version 3"));
+    contentBox.getChildren().add(FxLabels.newHyperlink(
+        () -> showLicense("Original MZmine MIT grant", "MZmine-MIT.txt"),
+        "Read original MZmine MIT grant"));
 
     // Third-party Libraries
     contentBox.getChildren().add(FxLabels.newBoldLabel("Third-party Libraries"));
@@ -95,5 +107,20 @@ public class AboutTab extends SimpleTab {
     scrollPane.setCenterShape(true);
 
     return scrollPane;
+  }
+
+  private static void showLicense(String title, String filename) {
+    try (InputStream stream = AboutTab.class.getClassLoader()
+        .getResourceAsStream("licenses/" + filename)) {
+      if (stream == null) {
+        MZmineCore.getDesktop().displayMessage(title,
+            "License resource is missing. See external_tools/licenses/ in the application package.");
+        return;
+      }
+      MZmineCore.getDesktop().displayMessage(title,
+          new String(stream.readAllBytes(), StandardCharsets.UTF_8));
+    } catch (IOException e) {
+      MZmineCore.getDesktop().displayMessage(title, "Cannot read license: " + e.getMessage());
+    }
   }
 }

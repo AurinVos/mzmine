@@ -1,6 +1,7 @@
 {
   "bundles" : [
     { "bundleName" : "Apache-1.1", "licenseName" : "Apache Software License, Version 1.1", "licenseUrl" : "https://www.apache.org/licenses/LICENSE-1.1" },
+    { "bundleName" : "JDOM", "licenseName" : "JDOM License", "licenseUrl" : "https://www.jdom.org/docs/faq.html" },
     { "bundleName" : "Apache-2.0", "licenseName" : "Apache License, Version 2.0", "licenseUrl" : "https://www.apache.org/licenses/LICENSE-2.0" },
     { "bundleName" : "0BSD", "licenseName" : "BSD Zero Clause License", "licenseUrl" : "https://opensource.org/licenses/0BSD" },
     { "bundleName" : "BSD-2-Clause", "licenseName" : "The 2-Clause BSD License", "licenseUrl" : "https://opensource.org/licenses/BSD-2-Clause" },
@@ -18,16 +19,27 @@
     { "bundleName" : "GPL-2.0 WITH Classpath-exception-2.0", "licenseName" : "GNU GENERAL PUBLIC LICENSE, Version 2 + Classpath Exception", "licenseUrl" : "https://openjdk.java.net/legal/gplv2+ce.html" },
     { "bundleName" : "LGPL-2.1-only", "licenseName" : "GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1", "licenseUrl" : "https://www.gnu.org/licenses/lgpl-2.1" },
     { "bundleName" : "LGPL-3.0-only", "licenseName" : "GNU LESSER GENERAL PUBLIC LICENSE, Version 3", "licenseUrl" : "https://www.gnu.org/licenses/lgpl-3.0" },
+    { "bundleName" : "MIT-0", "licenseName" : "MIT No Attribution", "licenseUrl" : "https://opensource.org/license/mit-0" },
+    { "bundleName" : "LGPL-2.1-or-later", "licenseName" : "GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1 or later", "licenseUrl" : "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
     { "bundleName" : "MIT", "licenseName" : "MIT License", "licenseUrl" : "https://opensource.org/licenses/MIT" },
     { "bundleName" : "MPL-1.1", "licenseName" : "Mozilla Public License Version 1.1", "licenseUrl" : "https://www.mozilla.org/en-US/MPL/1.1" },
     { "bundleName" : "MPL-2.0", "licenseName" : "Mozilla Public License, Version 2.0", "licenseUrl" : "https://www.mozilla.org/en-US/MPL/2.0" },
     { "bundleName" : "Public-Domain", "licenseName" : "PUBLIC DOMAIN", "licenseUrl" : "" }
   ],
   "transformationRules" : [
+    { "bundleName" : "LGPL-2.1-or-later", "licenseNamePattern" : "GNU LGPL 2\\.1 or later" },
+    { "bundleName" : "LGPL-2.1-or-later", "licenseNamePattern" : "GNU Lesser General Public License.*2\\.1.*or later" },
+    { "bundleName" : "LGPL-2.1-or-later", "modulePattern" : "org\\.jfree:jfreechart:1\\.5\\.3" },
+    { "bundleName" : "LGPL-2.1-or-later", "modulePattern" : "org\\.jfree:org\\.jfree\\.chart\\.fx:2\\.0\\.1" },
     { "bundleName" : "0BSD", "licenseNamePattern" : "BSD Zero Clause License" },
-    { "bundleName" : "0BSD", "licenseNamePattern" : "BSD$" },
-    { "bundleName" : "0BSD", "licenseNamePattern" : "BSD( |-)clause.*" },
-    { "bundleName" : "0BSD", "licenseNamePattern" : "BSD( |-)license.*" },
+    { "bundleName" : "BSD-3-Clause", "modulePattern" : "org\\.postgresql:postgresql:9\\.3-1102-jdbc41" },
+    { "bundleName" : "BSD-3-Clause", "licenseUrlPattern" : "https?://www\\.debian\\.org/misc/bsd\\.license" },
+    { "bundleName" : "GPL-2.0 WITH Classpath-exception-2.0", "modulePattern" : "com\\.sun\\.xml\\.bind:jaxb-core:2\\.3\\.0\\.1" },
+    { "bundleName" : "BSD-2-Clause", "modulePattern" : "com\\.github\\.yannrichet:JMath(Array|IO):1\\.0" },
+    { "bundleName" : "BSD-2-Clause", "modulePattern" : "com\\.github\\.yannrichet:JMathPlot:1\\.0\\.1" },
+    { "bundleName" : "GPL-2.0 WITH Classpath-exception-2.0", "modulePattern" : "org\\.openjfx:javafx-(base|controls|fxml|graphics|media|swing|web):26" },
+    { "bundleName" : "GPL-2.0 WITH Classpath-exception-2.0", "modulePattern" : "org\\.openjfx:jdk-jsobject:26" },
+    { "bundleName" : "JDOM", "modulePattern" : "org\\.jdom:jdom2:2\\.0\\.4" },
 
     { "bundleName" : "Apache-2.0", "licenseNamePattern" : ".*The Apache Software License, Version 2\\.0.*" },
     { "bundleName" : "Apache-2.0", "licenseNamePattern" : ".*?Apache( |-|_)2.*" },
@@ -37,7 +49,7 @@
     { "bundleName" : "Apache-2.0", "licenseUrlPattern" : ".*www\\.apache\\.org/licenses/LICENSE-2\\.0.*" },
     { "bundleName" : "Apache-2.0", "licenseFileContentPattern" : ".*Apache License,?( Version)? 2.*" },
     { "bundleName" : "Apache-1.1", "licenseFileContentPattern" : ".*Apache Software License, Version 1\\.1.*" },
-    { "bundleName" : "Apache-1.1", "licenseNamePattern" : "Similar to Apache License but with the acknowledgment clause removed" },
+    { "bundleName" : "JDOM", "licenseNamePattern" : "Similar to Apache License but with the acknowledgment clause removed" },
 
     { "bundleName" : "CC0-1.0", "licenseNamePattern" : "CC0(( |-)1(\\.0)?)?" },
     { "bundleName" : "CC0-1.0", "licenseUrlPattern" : ".*(www\\.)?creativecommons\\.org/publicdomain/zero/1\\.0/" },
@@ -58,7 +70,7 @@
     { "bundleName" : "CDDL-1.0", "licenseNamePattern" : "Common Development and Distribution( License)?" },
     { "bundleName" : "CDDL-1.0", "licenseNamePattern" : "CDDL 1(\\.0)" },
     { "bundleName" : "CDDL-1.1", "licenseNamePattern" : "CDDL 1\\.1" },
-    { "bundleName" : "CDDL-1.1", "licenseUrlPattern" : ".*(www\\.).opensource\\.org/licenses/CDDL-1\\.0" },
+    { "bundleName" : "CDDL-1.0", "licenseUrlPattern" : ".*(www\\.).opensource\\.org/licenses/CDDL-1\\.0" },
 
     { "bundleName" : "EPL-1.0", "licenseNamePattern" : "Eclipse Publish License.*(v|version)\\.?\\s?1(\\.?0)?" },
     { "bundleName" : "EPL-1.0", "licenseNamePattern" : "Eclipse Public License.*(v|version)\\.?\\s?1(\\.?0)?" },
@@ -102,21 +114,19 @@
 
     { "bundleName" : "LGPL-3.0-only", "licenseUrlPattern" : ".*(www\\.).opensource\\.org/licenses/LGPL-3\\.0" },
     { "bundleName" : "LGPL-3.0-only", "licenseNamePattern" : "lgplv?3" },
-    { "bundleName" : "LGPL-3.0-only", "licenseNamePattern" : "GNU LGPL" },
-    { "bundleName" : "LGPL-3.0-only", "licenseUrlPattern" : ".*(www\\.)?gnu\\.org/licenses(/old-licenses)?/lgpl(-3)?(\\.(html|txt))?" },
+    { "bundleName" : "LGPL-3.0-only", "licenseUrlPattern" : ".*(www\\.)?gnu\\.org/licenses(/old-licenses)?/lgpl-3(\\.(html|txt))?" },
     { "bundleName" : "LGPL-3.0-only", "licenseNamePattern" : "GNU Lesser General Public License, Version 3.0" },
 
     { "bundleName" : "MIT", "licenseNamePattern" : "(The\\s)?MIT(\\slicen(c|s)e)?(\\s\\(MIT\\))?" },
     { "bundleName" : "MIT", "licenseNamePattern" : "Bouncy Castle Licence" },
     { "bundleName" : "MIT", "licenseNamePattern" : "(MIT-style) netCDF C library license" },
-    { "bundleName" : "MIT", "licenseUrlPattern": ".*MIT-0.html" },
-    { "bundleName" : "MIT", "licenseNamePattern": "MIT No Attribution" },
+    { "bundleName" : "MIT-0", "licenseUrlPattern": ".*MIT-0.html" },
+    { "bundleName" : "MIT-0", "licenseNamePattern": "MIT No Attribution" },
     { "bundleName" : "MIT", "licenseUrlPattern" : ".*(www\\.)?opensource\\.org/licenses/MIT(\\.php)?" },
 
     { "bundleName" : "MPL-1.1", "licenseNamePattern" : "MPL 1\\.1" },
     { "bundleName" : "MPL-2.0", "licenseUrlPattern" : ".*(www\\.).opensource\\.org/licenses/MPL-2\\.0" },
     { "bundleName" : "Public-Domain", "licenseNamePattern" : "((public)\\s(domain)).*", "transformUrl" : false },
-    { "bundleName" : "Public-Domain", "licenseFileContentPattern" : ".*(Creative)\\s(Commons).*", "transformUrl" : false },
     { "bundleName" : "Public-Domain", "licenseFileContentPattern" : ".*((Public)\\s(Domain)).*", "transformUrl" : false }
   ]
 }

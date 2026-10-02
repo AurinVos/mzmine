@@ -1,22 +1,22 @@
-Copyright (c) 2004-2022 The MZmine Development Team
+MZmine combined application distribution
+=======================================
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
+This combined application is distributed under the GNU General Public License,
+version 3 (GPL-3.0-only). The full license is in licenses/GPL-3.0.txt.
+You may run MZmine for any purpose, including commercial work. Private use and
+internal modifications do not require publishing source. Redistribution must
+comply with the GPL, including its corresponding-source requirements.
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+This distribution includes changes made on 2026-10-02 to remove restricted vendor
+payloads and dependencies, require separately installed Thermo converters, and
+prepare release notices and corresponding sources.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+Existing file-level license grants and copyright notices remain in effect.
+MIT-licensed MZmine contributions retain their original MIT grants; see
+licenses/MZmine-MIT.txt. Files permitting GPL version 2 or later are included
+under GPL version 3 in the combined application. Third-party components retain
+their own licenses, notices and applicable exceptions. This notice does not
+relicense those components or independently installed vendor converters.
+
+There is no warranty; see the applicable licenses for the full disclaimers.
+For source and redistribution instructions, see licenses/REDISTRIBUTION.md.

@@ -1,0 +1,230 @@
+{
+  "target": "Windows x86_64",
+  "djl": {
+    "pytorchVersion": "2.1.1",
+    "version": "0.26.0",
+    "note": "Engine jar downloads native libraries on first use; this manifest does not certify separately downloaded CPU/CUDA/ROCm payloads.",
+    "nativePayloadBundled": false
+  },
+  "artifacts": [
+    {
+      "file": "OpenJDK26U-jdk-sources_26.0.2.1_1.tar.gz",
+      "sha256": "ec1404dd6d45a2fd78ec9ae3744471dcd770f737c546a60e7c50a48dc9a6d58b",
+      "required": true,
+      "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jdk-sources_26.0.2.1_1.tar.gz",
+      "component": "Temurin OpenJDK 26.0.2.1+1, full Java and native source",
+      "modules": []
+    },
+    {
+      "file": "OpenJDK26U-jdk_x64_windows_hotspot_26.0.2.1_1.zip.json",
+      "sha256": "930551ab4c70664270e1469f5b1591c5caef053066be58edf8bea3b8f5fdbc8c",
+      "required": true,
+      "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jdk_x64_windows_hotspot_26.0.2.1_1.zip.json",
+      "component": "Exact Windows x64 Temurin build metadata and configure arguments",
+      "modules": []
+    },
+    {
+      "file": "temurin-build-e6ba7dec3d07654074559310376a3ae89da5f4ac.tar.gz",
+      "sha256": "b1340378b9ed62b32acfacd012dd069ec2b9d940fc39d3c73f32142d64e89713",
+      "required": true,
+      "url": "https://codeload.github.com/adoptium/temurin-build/tar.gz/e6ba7dec3d07654074559310376a3ae89da5f4ac",
+      "component": "Exact Temurin build scripts",
+      "modules": []
+    },
+    {
+      "file": "openjfx-26-ga.tar.gz",
+      "sha256": "f248c945e9971f756f81a75d5fbf6ac06fc8c5a275dfa46f9c5f63bff9b7fdd6",
+      "required": true,
+      "url": "https://codeload.github.com/openjdk/jfx/tar.gz/refs/tags/26-ga",
+      "component": "OpenJFX 26+27 full source, native WebKit/GStreamer and build scripts",
+      "modules": [
+        "org.openjfx:javafx-base:26",
+        "org.openjfx:javafx-controls:26",
+        "org.openjfx:javafx-fxml:26",
+        "org.openjfx:javafx-graphics:26",
+        "org.openjfx:javafx-media:26",
+        "org.openjfx:javafx-swing:26",
+        "org.openjfx:javafx-web:26"
+      ]
+    },
+    {
+      "file": "djl-v0.26.0.tar.gz",
+      "sha256": "7e0c23d830d5816d4991fcee91d9509fbf80a3fc12ff5323a4b6ebfd1c934c6e",
+      "required": true,
+      "url": "https://codeload.github.com/deepjavalibrary/djl/tar.gz/refs/tags/v0.26.0",
+      "component": "DJL 0.26.0 Java, JNI source and build scripts",
+      "modules": [
+        "ai.djl:api:0.26.0",
+        "ai.djl.pytorch:pytorch-engine:0.26.0"
+      ]
+    },
+    {
+      "component": "JNA 5.13.0 Java, native JNI, embedded libffi and build scripts",
+      "url": "https://codeload.github.com/java-native-access/jna/tar.gz/refs/tags/5.13.0",
+      "required": true,
+      "file": "jna-5.13.0.tar.gz",
+      "sha256": "526bff8ffcbc2067a7403f55b01ad8d7a781c098abca79c4ea6c9e80198bb5fd",
+      "modules": [
+        "net.java.dev.jna:jna:5.13.0",
+        "net.java.dev.jna:jna-platform:5.13.0"
+      ]
+    },
+    {
+      "component": "JNA-InChI1.3.1 LGPL wrapper Java source and Maven build",
+      "url": "https://codeload.github.com/dan2097/jna-inchi/tar.gz/refs/tags/jna-inchi-1.3.1",
+      "required": true,
+      "file": "jna-inchi-1.3.1.tar.gz",
+      "sha256": "d2c3b562d851aa282dc531dc02acd80e57203da6b8402e13bfe72c147b2a3c6d",
+      "modules": [
+        "io.github.dan2097:jna-inchi-api:1.3.1",
+        "io.github.dan2097:jna-inchi-core:1.3.1",
+        "io.github.dan2097:jna-inchi-darwin-aarch64:1.3.1",
+        "io.github.dan2097:jna-inchi-darwin-x86-64:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-aarch64:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-arm:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-x86:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-x86-64:1.3.1",
+        "io.github.dan2097:jna-inchi-win32-x86:1.3.1",
+        "io.github.dan2097:jna-inchi-win32-x86-64:1.3.1"
+      ]
+    },
+    {
+      "component": "InChI1.07.2 MIT native source and build scripts",
+      "url": "https://codeload.github.com/IUPAC-InChI/InChI/tar.gz/refs/tags/v1.07.2",
+      "required": true,
+      "file": "inchi-v1.07.2.tar.gz",
+      "sha256": "0ff9336548bd682329872bdcb38fd11c92bba0856a1f365c146a7a54522c29b0",
+      "modules": [
+        "io.github.dan2097:jna-inchi-darwin-aarch64:1.3.1",
+        "io.github.dan2097:jna-inchi-darwin-x86-64:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-aarch64:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-arm:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-x86:1.3.1",
+        "io.github.dan2097:jna-inchi-linux-x86-64:1.3.1",
+        "io.github.dan2097:jna-inchi-win32-x86:1.3.1",
+        "io.github.dan2097:jna-inchi-win32-x86-64:1.3.1"
+      ]
+    },
+    {
+      "component": "SQLite JDBC3.41.2.2 JNI wrapper and native build scripts",
+      "url": "https://codeload.github.com/xerial/sqlite-jdbc/tar.gz/refs/tags/3.41.2.2",
+      "required": true,
+      "file": "sqlite-jdbc-3.41.2.2.tar.gz",
+      "sha256": "3433fe0997cbd7a505e97eaa15c7dce433e0501199141bbdd9e6ce2d1cf40019",
+      "modules": [
+        "org.xerial:sqlite-jdbc:3.41.2.2"
+      ]
+    },
+    {
+      "component": "SQLite3.41.2 native amalgamation used by SQLite JDBC",
+      "url": "https://www.sqlite.org/2023/sqlite-amalgamation-3410200.zip",
+      "required": true,
+      "file": "sqlite-amalgamation-3410200.zip",
+      "sha256": "01df06a84803c1ab4d62c64e995b151b2dbcf5dbc93bbc5eee213cb18225d987",
+      "modules": [
+        "org.xerial:sqlite-jdbc:3.41.2.2"
+      ]
+    },
+    {
+      "component": "Direct Netty4.1.123 native epoll/DNS source and build",
+      "url": "https://codeload.github.com/netty/netty/tar.gz/refs/tags/netty-4.1.123.Final",
+      "required": true,
+      "file": "netty-4.1.123.Final.tar.gz",
+      "sha256": "d9a5d9635e30bb2822dc08df6673ef56f851e9899773b44ad6d16baadfa56667",
+      "modules": [
+        "io.netty:netty-buffer:4.1.123.Final",
+        "io.netty:netty-codec:4.1.123.Final",
+        "io.netty:netty-codec-http:4.1.123.Final",
+        "io.netty:netty-codec-http2:4.1.123.Final",
+        "io.netty:netty-codec-socks:4.1.123.Final",
+        "io.netty:netty-common:4.1.123.Final",
+        "io.netty:netty-handler:4.1.123.Final",
+        "io.netty:netty-handler-proxy:4.1.123.Final",
+        "io.netty:netty-resolver:4.1.123.Final",
+        "io.netty:netty-resolver-dns:4.1.123.Final",
+        "io.netty:netty-resolver-dns-classes-macos:4.1.123.Final",
+        "io.netty:netty-resolver-dns-native-macos:4.1.123.Final",
+        "io.netty:netty-transport:4.1.123.Final",
+        "io.netty:netty-transport-classes-epoll:4.1.123.Final",
+        "io.netty:netty-transport-native-epoll:4.1.123.Final",
+        "io.netty:netty-transport-native-unix-common:4.1.123.Final"
+      ]
+    },
+    {
+      "component": "Shaded gRPC Netty4.1.124 native epoll source/build",
+      "url": "https://codeload.github.com/netty/netty/tar.gz/refs/tags/netty-4.1.124.Final",
+      "required": true,
+      "file": "netty-4.1.124.Final.tar.gz",
+      "sha256": "43f7c204fc96a1a803226b094af41ddfe014740d7fe0009d58a884e8f6833d2c",
+      "modules": [
+        "io.netty:netty-buffer:4.1.124.Final",
+        "io.netty:netty-codec:4.1.124.Final",
+        "io.netty:netty-codec-http:4.1.124.Final",
+        "io.netty:netty-codec-http2:4.1.124.Final",
+        "io.netty:netty-codec-socks:4.1.124.Final",
+        "io.netty:netty-common:4.1.124.Final",
+        "io.netty:netty-handler:4.1.124.Final",
+        "io.netty:netty-handler-proxy:4.1.124.Final",
+        "io.netty:netty-resolver:4.1.124.Final",
+        "io.netty:netty-resolver-dns:4.1.124.Final",
+        "io.netty:netty-resolver-dns-classes-macos:4.1.124.Final",
+        "io.netty:netty-resolver-dns-native-macos:4.1.124.Final",
+        "io.netty:netty-transport:4.1.124.Final",
+        "io.netty:netty-transport-classes-epoll:4.1.124.Final",
+        "io.netty:netty-transport-native-epoll:4.1.124.Final",
+        "io.netty:netty-transport-native-unix-common:4.1.124.Final"
+      ]
+    },
+    {
+      "component": "gRPC1.76.0 source and native shading build",
+      "url": "https://codeload.github.com/grpc/grpc-java/tar.gz/refs/tags/v1.76.0",
+      "required": true,
+      "file": "grpc-java-v1.76.0.tar.gz",
+      "sha256": "8c7ec45c35b0956044041799f7a028ccf76eb6c1fc8bde7bb3fcd8d896eb7b70",
+      "modules": [
+        "io.grpc:grpc-api:1.76.0",
+        "io.grpc:grpc-context:1.76.0",
+        "io.grpc:grpc-core:1.76.0",
+        "io.grpc:grpc-netty:1.76.0",
+        "io.grpc:grpc-protobuf:1.76.0",
+        "io.grpc:grpc-protobuf-lite:1.76.0",
+        "io.grpc:grpc-stub:1.76.0",
+        "io.grpc:grpc-util:1.76.0",
+        "io.grpc:grpc-services:1.76.0",
+        "io.grpc:grpc-inprocess:1.76.0"
+      ]
+    },
+    {
+      "component": "LZ4Java1.4.1 native source including LZ4 and build",
+      "url": "https://codeload.github.com/lz4/lz4-java/tar.gz/refs/tags/1.4.1",
+      "required": true,
+      "file": "lz4-java-1.4.1.tar.gz",
+      "sha256": "51879a1ad29f55409eea19d3c83799be1dc308ad549daee2ff13931dd752c31c",
+      "modules": [
+        "org.lz4:lz4-java:1.4.1"
+      ]
+    },
+    {
+      "component": "ZstdJNI1.3.4-10 native zstd/JNI source and build",
+      "url": "https://codeload.github.com/luben/zstd-jni/tar.gz/refs/tags/v1.3.4-10",
+      "required": true,
+      "file": "zstd-jni-1.3.4-10.tar.gz",
+      "sha256": "17cebafa1899e637c468270c1cc31f39da88b795c213926fa14b588a68d70af3",
+      "modules": [
+        "com.github.luben:zstd-jni:1.3.4-10"
+      ]
+    }
+  ],
+  "jdk": {
+    "buildCommit": "e6ba7dec3d07654074559310376a3ae89da5f4ac",
+    "version": "26.0.2.1+1",
+    "sourceCommit": "6b28bd7149bb4e4c82d0f8f37f0fea79012f392f",
+    "vendor": "Eclipse Adoptium"
+  },
+  "schemaVersion": 1,
+  "outputDirectory": "mzmine-community/build/corresponding-source/native",
+  "openjfx": {
+    "sourceCommit": "472e74b1e0c71cfd2b75711a18b108fa154ad618",
+    "version": "26+27"
+  }
+}

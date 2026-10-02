@@ -494,7 +494,7 @@ public class PubChemApiClient implements AutoCloseable {
   // --- Parsing and Utility Methods (Mostly static or use instance mapper) ---
 
   // Still uses org.json for structure check
-  private static boolean isWaitingResponseInternal(String responseBody) {
+  static boolean isWaitingResponseInternal(String responseBody) {
     if (responseBody == null || !responseBody.trim().startsWith("{")) {
       return false;
     }
@@ -506,7 +506,7 @@ public class PubChemApiClient implements AutoCloseable {
   }
 
   // Still uses org.json
-  private static String extractListKeyInternal(String responseBody) {
+  static String extractListKeyInternal(String responseBody) {
     if (responseBody == null) {
       return null;
     }
@@ -520,7 +520,7 @@ public class PubChemApiClient implements AutoCloseable {
   }
 
   // Still uses org.json
-  private static String extractFaultMessageInternal(String responseBody) {
+  static String extractFaultMessageInternal(String responseBody) {
     if (responseBody == null) {
       return "(No Body)";
     }
@@ -536,7 +536,7 @@ public class PubChemApiClient implements AutoCloseable {
     return responseBody;
   }
 
-  private static List<String> parseCidResponseInternal(String jsonResponse)
+  static List<String> parseCidResponseInternal(String jsonResponse)
       throws PubChemApiException, JSONException {
     try {
       JSONObject r = new JSONObject(jsonResponse);
