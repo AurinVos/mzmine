@@ -44,7 +44,7 @@ import io.github.mzmine.util.FeatureListRowSorter;
 import io.github.mzmine.util.FeatureListUtils;
 import io.github.mzmine.util.MathUtils;
 import io.github.mzmine.util.MemoryMapStorage;
-import io.mzio.links.MzioMZmineLinks;
+import io.github.mzmine.util.web.MZmineLinks;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -292,7 +292,7 @@ public class BaseFeatureListAligner {
                   such as increased minimum height, chromatographic threshold, and feature top/edge ratio in the local minimum resolver. \
                   When working on large datasets, consult the performance documentation for tuning options:
                   """.formatted(totalRows, featureLists.size())),
-              FxTexts.hyperlinkText(MzioMZmineLinks.PERFORMANCE_DOCU.getUrl())));
+              FxTexts.hyperlinkText(MZmineLinks.PERFORMANCE_DOCU.getUrl())));
     }
   }
 

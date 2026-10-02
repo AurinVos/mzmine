@@ -37,7 +37,6 @@ repositories {
 }
 
 dependencies {
-    implementation("io.mzio:memory-management:1.0.0")
     implementation(project(":utils"))
     implementation(libs.guava)
 }

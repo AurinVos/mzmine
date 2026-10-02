@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -60,6 +61,7 @@ import testutils.MZmineTestUtil;
  * multiple largely differing mobility segments or per-frame pressure recalibration.
  */
 @TestInstance(Lifecycle.PER_CLASS)
+@Disabled("Requires the separately distributed proprietary Bruker timsdata library")
 @DisabledOnOs(OS.MAC)
 public class BinningMobilogramDataAccessTdfTest {
 

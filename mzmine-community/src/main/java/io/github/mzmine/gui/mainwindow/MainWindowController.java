@@ -85,9 +85,9 @@ import io.github.mzmine.util.javafx.groupabletreeview.GroupTreeItem;
 import io.github.mzmine.util.javafx.groupabletreeview.GroupableTreeCell;
 import io.github.mzmine.util.javafx.groupabletreeview.GroupableTreeView;
 import io.github.mzmine.util.spectraldb.entry.SpectralLibrary;
-import io.mzio.mzmine.gui.workspace.Workspace;
-import io.mzio.mzmine.gui.workspace.WorkspaceMenuHelper;
-import io.mzio.mzmine.gui.workspace.WorkspaceTags;
+import io.github.mzmine.gui.mainwindow.workspace.Workspace;
+import io.github.mzmine.gui.mainwindow.workspace.WorkspaceMenuHelper;
+import io.github.mzmine.gui.mainwindow.workspace.WorkspaceTags;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -266,8 +266,8 @@ public class MainWindowController {
         if (rawDataFile.isContainsZeroIntensity() && MassSpectrumType.isCentroided(
             rawDataFile.getSpectraType())) {
           tip.setText("""
-              Scans were detected as centroid but contain zero-intensity values. This might indicate incorrect conversion by msconvert. 
-              Make sure to run "peak picking" with vendor algorithm as the first step (even before title maker), otherwise msconvert uses 
+              Scans were detected as centroid but contain zero-intensity values. This might indicate incorrect conversion by msconvert.
+              Make sure to run "peak picking" with vendor algorithm as the first step (even before title maker), otherwise msconvert uses
               a different algorithm that picks the highest data point of a profile spectral peak and adds zero intensities next to each signal.
               This leads to degraded mass accuracies.""");
         } else if (rawDataFile.isContainsEmptyScans()) {

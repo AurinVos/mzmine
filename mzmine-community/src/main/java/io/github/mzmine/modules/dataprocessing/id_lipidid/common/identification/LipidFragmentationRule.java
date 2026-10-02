@@ -34,7 +34,7 @@ import io.github.mzmine.modules.dataprocessing.id_lipidid.utils.LipidParsingUtil
 import io.github.mzmine.modules.io.projectload.version_3_0.CONST;
 import io.github.mzmine.util.FormulaUtils;
 import io.github.mzmine.util.ParsingUtils;
-import io.mzio.general.Result;
+import io.github.mzmine.util.Result;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;

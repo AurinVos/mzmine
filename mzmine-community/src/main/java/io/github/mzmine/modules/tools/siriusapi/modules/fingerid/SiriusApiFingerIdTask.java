@@ -45,7 +45,6 @@ import io.github.mzmine.util.FeatureTableFXUtil;
 import io.github.mzmine.util.FeatureUtils;
 import io.github.mzmine.util.MemoryMapStorage;
 import io.github.mzmine.util.concurrent.CloseableReentrantReadWriteLock;
-import io.mzio.users.user.CurrentUserService;
 import io.sirius.ms.sdk.model.Job;
 import io.sirius.ms.sdk.model.JobOptField;
 import io.sirius.ms.sdk.model.JobSubmission;
@@ -137,7 +136,7 @@ public class SiriusApiFingerIdTask extends AbstractFeatureListTask {
 
     final HiddenParameter<Map<String, Boolean>> optOutParam = ConfigService.getConfiguration()
         .getPreferences().getParameter(MZminePreferences.siriusCountWarningOptOut);
-    final String userHash = String.valueOf(CurrentUserService.getUserName().hashCode());
+    final String userHash = Integer.toString(System.getProperty("user.name", "local").hashCode());
 
     try (var _ = optOutLock.lockRead()) {
       if (Boolean.TRUE.equals(optOutParam.getValue().get(userHash))) {

@@ -55,9 +55,8 @@ import io.github.mzmine.util.web.ProxyTestUtils;
 import io.github.mzmine.util.web.ProxyUtils;
 import io.github.mzmine.util.web.proxy.FullProxyConfig;
 import io.github.mzmine.util.web.truststore.NativeTrustStoreManager;
-import io.mzio.events.EventService;
-import io.mzio.mzmine.startup.MZmineExit;
-import io.mzio.users.user.MZmineUser;
+import io.github.mzmine.event.EventService;
+import io.github.mzmine.main.MZmineExit;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -144,9 +143,7 @@ public final class MZmineCore {
   }
 
   /** Compatibility hook retained for existing GUI callers; local analysis has no account expiry. */
-  public static void checkUserRemainingDays(MZmineUser user) {
-    // No-op by design.
-  }
+
 
   /** Preserve non-authentication runtime events such as proxy changes. */
   private static void addRuntimeEventListener() {

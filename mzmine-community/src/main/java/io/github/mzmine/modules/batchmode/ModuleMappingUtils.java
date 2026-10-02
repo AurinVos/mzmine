@@ -40,8 +40,6 @@ public class ModuleMappingUtils {
    */
   public static Map<String, String> getOldModuleNamesMap() {
     Map<String, String> oldNames = HashMap.newHashMap(5);
-    oldNames.put("io.mzio.mzminepro.modules.otherdata.filt_shifttraces.ShiftTracesModule",
-        "io.mzio.mzminepro.modules.otherdata.filt_shifttraces.ShiftTrimAndBinTracesModule");
 
     return oldNames;
   }

@@ -61,6 +61,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+@Disabled("Requires the separately distributed proprietary Bruker timsdata library")
 public class BrukerTdfTest {
 
   private static Logger logger = Logger.getLogger(BrukerTdfTest.class.getName());

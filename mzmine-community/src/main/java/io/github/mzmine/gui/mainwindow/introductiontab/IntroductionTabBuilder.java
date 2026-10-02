@@ -30,7 +30,6 @@ import static io.github.mzmine.javafx.components.util.FxLayout.newScrollPane;
 import static io.github.mzmine.javafx.components.util.FxLayout.newVBox;
 
 import io.github.mzmine.gui.DesktopService;
-import io.github.mzmine.gui.mainwindow.UsersTab;
 import io.github.mzmine.gui.preferences.MZminePreferences;
 import io.github.mzmine.javafx.components.animations.FxFlashingAnimation;
 import io.github.mzmine.javafx.components.factories.FxButtons;
@@ -43,10 +42,7 @@ import io.github.mzmine.main.ConfigService;
 import io.github.mzmine.main.MZmineCore;
 import io.github.mzmine.modules.tools.batchwizard.BatchWizardTab;
 import io.github.mzmine.util.javafx.LightAndDarkModeIcon;
-import io.mzio.links.MzioMZmineLinks;
-import io.mzio.users.service.UserType;
-import io.mzio.users.user.CurrentUserService;
-import io.mzio.users.user.MZmineUser;
+import io.github.mzmine.util.web.MZmineLinks;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -154,10 +150,6 @@ public class IntroductionTabBuilder extends FxViewBuilder<IntroductionTabModel> 
     final ButtonBase btnWebsite = FxIconUtil.newIconButton(FxIcons.WEBSITE, 45, "mzmine website",
         () -> MZmineCore.getDesktop().openWebPage("https://mzio.io/#mzmine"));
 
-    final ButtonBase btnUserManagement = FxIconUtil.newIconButton(FxIcons.USER, 45,
-        "User management", UsersTab::showTab);
-    FxFlashingAnimation.animate(btnUserManagement, model.needsUserLoginProperty());
-
     final ButtonBase btnDevelopment = FxIconUtil.newIconButton(FxIcons.DEVELOPMENT, 45,
         "Join the development", () -> MZmineCore.getDesktop()
             .openWebPage("https://mzmine.github.io/mzmine_documentation/contribute_intellij.html"));
@@ -175,7 +167,7 @@ public class IntroductionTabBuilder extends FxViewBuilder<IntroductionTabModel> 
         () -> MZmineCore.getDesktop().openWebPage("https://mzio.io/mzmine-news/"));
 
     FlowPane pane = new FlowPane(20, 20, btnPreferences, btnDocs, btnYoutube, btnWebsite,
-        btnUserManagement, btnDevelopment, btnWhatsNew);
+        btnDevelopment, btnWhatsNew);
     pane.setAlignment(Pos.CENTER);
     return pane;
   }
@@ -214,10 +206,7 @@ public class IntroductionTabBuilder extends FxViewBuilder<IntroductionTabModel> 
   }
 
   private void createAndAddQuickStartLink(ObservableList<Node> children) {
-    final MZmineUser user = CurrentUserService.getUser();
-    // only show if not clicked yet, or the is null or trial
-    if (!ConfigService.getPreference(MZminePreferences.showQuickStart) || (user != null
-        && user.getUserType() != UserType.TRIAL_PRO)) {
+    if (!ConfigService.getPreference(MZminePreferences.showQuickStart)) {
       return;
     }
 
@@ -226,7 +215,7 @@ public class IntroductionTabBuilder extends FxViewBuilder<IntroductionTabModel> 
         "icons/introductiontab/quickstart_mockup_darkmode.png", 350, 200);
     final Button button = FxButtons.graphicButton(icon, "Open a quick start video for mzmine.",
         _ -> {
-          DesktopService.getDesktop().openWebPage(MzioMZmineLinks.WIZARD_QUICKSTART_VIDEO.getUrl());
+          DesktopService.getDesktop().openWebPage(MZmineLinks.WIZARD_QUICKSTART_VIDEO.getUrl());
           ConfigService.getPreferences().setParameter(MZminePreferences.showQuickStart, false);
         });
     children.add(button);

@@ -35,7 +35,6 @@ import io.github.mzmine.datamodel.identities.fx.GlobalIonLibrariesModule;
 import io.github.mzmine.gui.DesktopService;
 import io.github.mzmine.gui.MZmineGUI;
 import io.github.mzmine.gui.WindowLocation;
-import io.github.mzmine.gui.mainwindow.UsersTab;
 import io.github.mzmine.gui.mainwindow.dependenciestab.DependenciesTab;
 import io.github.mzmine.gui.mainwindow.introductiontab.MZmineIntroductionTab;
 import io.github.mzmine.javafx.concurrent.threading.FxThread;
@@ -147,13 +146,10 @@ import io.github.mzmine.modules.visualization.vankrevelendiagram.VanKrevelenDiag
 import io.github.mzmine.util.javafx.FxMenuUtil;
 import io.github.mzmine.util.javafx.ModuleMenuItem;
 import io.github.mzmine.util.javafx.WindowsMenu;
-import io.mzio.links.MzioMZmineLinks;
-import io.mzio.mzmine.gui.workspace.Workspace;
-import io.mzio.mzmine.gui.workspace.WorkspaceMenuHelper;
-import io.mzio.mzmine.gui.workspace.WorkspaceTags;
-import io.mzio.users.client.UserAuthStore;
-import io.mzio.users.gui.fx.UsersViewState;
-import io.mzio.users.user.CurrentUserService;
+import io.github.mzmine.util.web.MZmineLinks;
+import io.github.mzmine.gui.mainwindow.workspace.Workspace;
+import io.github.mzmine.gui.mainwindow.workspace.WorkspaceMenuHelper;
+import io.github.mzmine.gui.mainwindow.workspace.WorkspaceTags;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -411,7 +407,7 @@ public abstract class AbstractWorkspace implements Workspace {
     addMenuItem(menu, "Open documentation", () -> MZmineCore.getDesktop()
         .openWebPage("https://mzmine.github.io/mzmine_documentation/"));
     addMenuItem(menu, "Open quick start video", () -> DesktopService.getDesktop()
-        .openWebPage(MzioMZmineLinks.WIZARD_QUICKSTART_VIDEO.getUrl()));
+        .openWebPage(MZmineLinks.WIZARD_QUICKSTART_VIDEO.getUrl()));
     addMenuItem(menu, "Open landing page",
         () -> MZmineCore.getDesktop().addTab(new MZmineIntroductionTab()));
 
@@ -434,18 +430,7 @@ public abstract class AbstractWorkspace implements Workspace {
     return menu;
   }
 
-  protected Menu buildDefaultUsersMenu() {
-    final Menu menu = new Menu("Users");
-    addMenuItem(menu, "Manage users", () -> FxThread.runLater(UsersTab::showTab), KeyCode.U,
-        KeyCombination.SHORTCUT_DOWN); // why fx thread?
-    addMenuItem(menu, "Sign in / Sign up", () -> UsersTab.showTab(UsersViewState.LOGIN));
-    addMenuItem(menu, "Remove user",
-        () -> UserAuthStore.removeUserFile(CurrentUserService.getUser()));
-    addMenuItem(menu, "Open users directory", getWorkspaceMenuHelper()::openUsersDirectory);
-    addMenuItem(menu, "Manage user online",
-        () -> DesktopService.getDesktop().openWebPage(MzioMZmineLinks.USER_CONSOLE.getUrl()));
-    return menu;
-  }
+
 
   protected Menu buildDefaultWorkspacesMenu() {
     final Menu menu = new Menu("Workspaces");
@@ -459,10 +444,6 @@ public abstract class AbstractWorkspace implements Workspace {
 
       ToggleGroup grp = new ToggleGroup();
       for (Workspace workspace : WorkspaceMenuHelper.getWorkspaces().values()) {
-        if (!workspace.isAllowedWithLicense(CurrentUserService.getUser())) {
-          continue;
-        }
-
         final RadioMenuItem item = addRadioMenuItem(menu, grp, workspace.getName(),
             () -> ((MZmineGUI) MZmineCore.getDesktop()).setWorkspace(workspace,
                 EnumSet.allOf(WorkspaceTags.class)));

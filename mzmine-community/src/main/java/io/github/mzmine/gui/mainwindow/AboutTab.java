@@ -30,7 +30,7 @@ import io.github.mzmine.javafx.components.factories.FxLabels;
 import io.github.mzmine.main.MZmineCore;
 import io.github.mzmine.util.io.SemverVersionReader;
 import io.github.mzmine.util.javafx.LightAndDarkModeIcon;
-import io.mzio.links.MzioMZmineLinks;
+import io.github.mzmine.util.web.MZmineLinks;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -68,14 +68,14 @@ public class AboutTab extends SimpleTab {
 
     // Privacy Policy
     contentBox.getChildren().add(FxLabels.newBoldLabel("Privacy Policy"));
-    Hyperlink privacyPolicy = FxLabels.newWebHyperlink(MzioMZmineLinks.PRIVACY_POLICY.getUrl());
+    Hyperlink privacyPolicy = FxLabels.newWebHyperlink(MZmineLinks.PRIVACY_POLICY.getUrl());
     contentBox.getChildren().add(privacyPolicy);
 
     // Terms and conditions
     //TODO add to mzio links
     contentBox.getChildren().add(FxLabels.newBoldLabel("Terms and Conditions"));
     Hyperlink legalInfo = FxLabels.newWebHyperlink(
-        MzioMZmineLinks.TERMS_CONDITIONS.getUrl()); // Assuming you're updating this
+        MZmineLinks.TERMS_CONDITIONS.getUrl()); // Assuming you're updating this
     contentBox.getChildren().add(legalInfo);
 
     // Third-party Libraries

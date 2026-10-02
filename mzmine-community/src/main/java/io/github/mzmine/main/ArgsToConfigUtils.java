@@ -28,7 +28,7 @@ package io.github.mzmine.main;
 import io.github.mzmine.gui.preferences.MZminePreferences;
 import io.github.mzmine.util.StringUtils;
 import io.github.mzmine.util.files.FileAndPathUtil;
-import io.mzio.mzmine.startup.MZmineExit;
+import io.github.mzmine.main.MZmineExit;
 import java.io.File;
 import java.util.Objects;
 import java.util.logging.Level;

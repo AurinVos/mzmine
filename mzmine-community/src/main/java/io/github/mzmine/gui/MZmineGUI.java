@@ -41,7 +41,6 @@ import io.github.mzmine.gui.mainwindow.MZmineTab;
 import io.github.mzmine.gui.mainwindow.MainWindowController;
 import io.github.mzmine.gui.mainwindow.ProjectTab;
 import io.github.mzmine.gui.mainwindow.SimpleTab;
-import io.github.mzmine.gui.mainwindow.UsersTab;
 import io.github.mzmine.gui.mainwindow.tasksview.TasksViewController;
 import io.github.mzmine.gui.preferences.MZminePreferences;
 import io.github.mzmine.javafx.components.factories.FxTextFlows;
@@ -81,13 +80,9 @@ import io.github.mzmine.util.javafx.groupabletreeview.NoGroupingStrategy;
 import io.github.mzmine.util.javafx.groupabletreeview.RawDataMetadataGroupingStrategy;
 import io.github.mzmine.util.spectraldb.entry.SpectralLibrary;
 import io.github.mzmine.util.web.WebUtils;
-import io.mzio.mzmine.gui.workspace.Workspace;
-import io.mzio.mzmine.gui.workspace.WorkspaceTags;
-import io.mzio.mzmine.startup.MZmineExit;
-import io.mzio.users.client.UserAuthStore;
-import io.mzio.users.gui.fx.UsersViewState;
-import io.mzio.users.user.CurrentUserService;
-import io.mzio.users.user.MZmineUser;
+import io.github.mzmine.gui.mainwindow.workspace.Workspace;
+import io.github.mzmine.gui.mainwindow.workspace.WorkspaceTags;
+import io.github.mzmine.main.MZmineExit;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -432,14 +427,7 @@ public class MZmineGUI implements MZmineDesktop, JavaFxDesktop {
           String resultStr = result ? "succeeded" : "failed";
           messages.add("Adding wizard file %s %s".formatted(selectedFile.getName(), resultStr));
         }
-        if (UserAuthStore.isUserFile(extension)) {
-          var result = UserAuthStore.copyAddUserFile(selectedFile);
-          String resultStr = result ? "succeeded" : "failed";
-          messages.add("Adding user %s %s".formatted(selectedFile.getName(), resultStr));
-          if (result) {
-            askChangeUser(selectedFile.getName());
-          }
-        }
+
 
         if (selectedFile.getName().trim().toLowerCase().endsWith("mzbatch")) {
           lastBatchFile = selectedFile;
@@ -490,24 +478,7 @@ public class MZmineGUI implements MZmineDesktop, JavaFxDesktop {
     }
   }
 
-  private static void askChangeUser(final String fileName) {
-    try {
-      MZmineUser user = UserAuthStore.readUserByFileName(fileName);
-      if (user == null) {
-        return;
-      }
 
-      boolean changeUserResult = DialogLoggerUtil.showDialogYesNo("Changing active user",
-          "Switch to user %s?".formatted(user.getNickname()));
-
-      if (changeUserResult) {
-        CurrentUserService.setUser(user);
-      }
-    } catch (IOException e) {
-      logger.warning("Cannot find local user after copying user file by drag and drop");
-    }
-    UsersTab.showTab(UsersViewState.LOCAL_USERS);
-  }
 
   public static void handleTaskManagerLocationChange(WindowLocation loc) {
     if (mainWindowController == null) {
@@ -671,7 +642,6 @@ public class MZmineGUI implements MZmineDesktop, JavaFxDesktop {
     rootScene.addEventHandler(KeyEvent.KEY_RELEASED, GlobalKeyHandler.getInstance());
 
     // check user in gui mode and show message now
-    MZmineCore.checkUserRemainingDays(CurrentUserService.getUser());
   }
 
   private static void autoUpdatePreferencesByStageWindowSettings(Stage stage) {

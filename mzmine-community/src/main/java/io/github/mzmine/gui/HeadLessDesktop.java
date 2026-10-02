@@ -31,7 +31,7 @@ import io.github.mzmine.gui.mainwindow.MZmineTab;
 import io.github.mzmine.gui.mainwindow.tasksview.TasksViewController;
 import io.github.mzmine.util.ExitCode;
 import io.github.mzmine.util.spectraldb.entry.SpectralLibrary;
-import io.mzio.mzmine.startup.MZmineExit;
+import io.github.mzmine.main.MZmineExit;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;

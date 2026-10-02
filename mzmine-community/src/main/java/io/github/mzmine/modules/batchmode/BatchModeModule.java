@@ -39,7 +39,7 @@ import io.github.mzmine.modules.io.projectload.ProjectOpeningTask;
 import io.github.mzmine.parameters.ParameterSet;
 import io.github.mzmine.taskcontrol.Task;
 import io.github.mzmine.util.ExitCode;
-import io.mzio.mzmine.startup.MZmineExit;
+import io.github.mzmine.main.MZmineExit;
 import java.io.File;
 import java.time.Instant;
 import java.util.ArrayList;

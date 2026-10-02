@@ -26,7 +26,7 @@
 package io.github.mzmine.util.web;
 
 import io.github.mzmine.util.web.proxy.FullProxyConfig;
-import io.mzio.events.MzEvent;
+import io.github.mzmine.event.MzEvent;
 
 public record ProxyChangedEvent(FullProxyConfig config, ProxyDefinition proxy) implements MzEvent {
 
