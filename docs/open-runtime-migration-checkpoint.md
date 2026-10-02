@@ -235,6 +235,8 @@ Do not use a decompiler/disassembler to reproduce current `io.mzio` implementati
 Completed:
 
 - removed mandatory login gating on `main`
+- restored and adapted the MIT command-line parser into the active source set
+- redirected startup and configuration handling away from `MZmineCoreArgumentParser`
 - identified the seven `io.mzio` artifacts
 - identified the three root build dependency edges
 - traced verified MIT task-controller source
@@ -245,7 +247,7 @@ Completed:
 
 Not yet completed:
 
-- source restoration into current modules
+- remaining source restoration into current modules
 - adaptation to current APIs
 - removal of `libs.bundles.mzio`
 - removal of all account/user call sites
