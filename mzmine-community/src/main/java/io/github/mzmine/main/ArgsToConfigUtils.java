@@ -28,7 +28,6 @@ package io.github.mzmine.main;
 import io.github.mzmine.gui.preferences.MZminePreferences;
 import io.github.mzmine.util.StringUtils;
 import io.github.mzmine.util.files.FileAndPathUtil;
-import io.mzio.mzmine.startup.MZmineCoreArgumentParser;
 import io.mzio.mzmine.startup.MZmineExit;
 import java.io.File;
 import java.util.Objects;
@@ -39,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Helper class to apply all parsed args from the
- * {@link io.mzio.mzmine.startup.MZmineCoreArgumentParser} to the {@link ConfigService}.
+ * {@link MZmineArgumentParser} to the {@link ConfigService}.
  */
 class ArgsToConfigUtils {
 
@@ -47,11 +46,11 @@ class ArgsToConfigUtils {
 
   /**
    * Parses all relevant arguments from the given program arguments and initialises the
-   * {@link MZmineCoreArgumentParser} instance in this class.
+   * {@link MZmineArgumentParser} instance in this class.
    *
    * @param argsParser The args parser
    */
-  static void applyArgsToConfig(final MZmineCoreArgumentParser argsParser) {
+  static void applyArgsToConfig(final MZmineArgumentParser argsParser) {
     ConfigService.setTdfPseudoProfile(argsParser.isLoadTdfPseudoProfile());
 
     checkAndLoadArgsConfiguration(argsParser);
@@ -73,7 +72,7 @@ class ArgsToConfigUtils {
     ConfigService.setIgnoreParameterWarningsInBatch(argsParser.isIgnoreParameterWarnings());
   }
 
-  static void checkAndOverrideArgsTempDir(MZmineCoreArgumentParser argsParser) {
+  static void checkAndOverrideArgsTempDir(MZmineArgumentParser argsParser) {
     // override temp directory
     final File tempDirectory = argsParser.getTempDirectory();
     if (tempDirectory != null) {
@@ -88,7 +87,7 @@ class ArgsToConfigUtils {
     }
   }
 
-  static void checkAndOverrideArgsMemoryOption(@NotNull final MZmineCoreArgumentParser argsParser) {
+  static void checkAndOverrideArgsMemoryOption(@NotNull final MZmineArgumentParser argsParser) {
     KeepInMemory keepInMemory;
     try {
       var memory = argsParser.isKeepInMemory();
@@ -115,7 +114,7 @@ class ArgsToConfigUtils {
     keepInMemory.enforceToMemoryMapping();
   }
 
-  static void checkAndLoadArgsConfiguration(@NotNull final MZmineCoreArgumentParser argsParser) {
+  static void checkAndLoadArgsConfiguration(@NotNull final MZmineArgumentParser argsParser) {
     // override preferences file by command line argument pref
     final File prefFile = Objects.requireNonNullElse(argsParser.getPreferencesFile(),
         MZmineConfiguration.CONFIG_FILE);
@@ -140,7 +139,7 @@ class ArgsToConfigUtils {
   /**
    * Set number of cores to automatic or to fixed number
    */
-  static void setNumThreadsOverride(@NotNull final MZmineCoreArgumentParser argsParser) {
+  static void setNumThreadsOverride(@NotNull final MZmineArgumentParser argsParser) {
     final String numCores = argsParser.getNumCores();
     if (numCores != null) {
       // set to preferences

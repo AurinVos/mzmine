@@ -56,7 +56,6 @@ import io.github.mzmine.util.web.ProxyUtils;
 import io.github.mzmine.util.web.proxy.FullProxyConfig;
 import io.github.mzmine.util.web.truststore.NativeTrustStoreManager;
 import io.mzio.events.EventService;
-import io.mzio.mzmine.startup.MZmineCoreArgumentParser;
 import io.mzio.mzmine.startup.MZmineExit;
 import io.mzio.users.user.MZmineUser;
 import java.io.File;
@@ -102,7 +101,7 @@ public final class MZmineCore {
     try {
       printDebugInfo(args);
 
-      final MZmineCoreArgumentParser argsParser = new MZmineCoreArgumentParser(args);
+      final MZmineArgumentParser argsParser = new MZmineArgumentParser(args);
       getInstance().startUp(argsParser);
       launchBatchOrGui(args, argsParser);
 
@@ -119,7 +118,7 @@ public final class MZmineCore {
    * the batch or gui. Note: not static so it ensures that the {@link MZmineCore#init()} method is
    * called.
    */
-  public void startUp(@NotNull final MZmineCoreArgumentParser argsParser) {
+  public void startUp(@NotNull final MZmineArgumentParser argsParser) {
     // register first so that GUI and headless (CLI) runs always clean up on exit
     ShutDownHook.register();
 
@@ -189,7 +188,7 @@ public final class MZmineCore {
    * @param args       the program arguments, required to launch the gui.
    * @param argsParser Args parser for easy access to e.g. the batch file.
    */
-  public static void launchBatchOrGui(String[] args, MZmineCoreArgumentParser argsParser) {
+  public static void launchBatchOrGui(String[] args, MZmineArgumentParser argsParser) {
     // batch mode defined by command line argument
     final File batchFile = argsParser.getBatchFile();
     final boolean isCliBatchProcessing = batchFile != null;
@@ -523,7 +522,7 @@ public final class MZmineCore {
     return !isHeadLessMode();
   }
 
-  private static void showStartupSplash(@NotNull final MZmineCoreArgumentParser argsParser) {
+  private static void showStartupSplash(@NotNull final MZmineArgumentParser argsParser) {
     if (argsParser.getBatchFile() != null) {
       // basically a headless check when DesktopService is not initialized (always headless at this point)
       return;
