@@ -77,13 +77,19 @@ public class AboutTab extends SimpleTab {
     contentBox.getChildren().add(FxLabels.newBoldLabel("Application License"));
     Label applicationLicense = FxLabels.newLabel(
         "The combined application is distributed under GNU GPL version 3. "
-            + "You may use it for any purpose, including commercial work. "
+            + "MZmine's own code permits use for any purpose, including commercial work. "
+            + "jimzMLParser 1.0.3 has an UNKNOWN / UNVERIFIED license and is included with "
+            + "the repository owner's acceptance; this is not an upstream grant or verification "
+            + "of commercial redistribution permission or GPL compatibility. "
             + "Private use and internal modifications do not require publishing source; "
             + "redistribution must comply with the GPL, including corresponding-source obligations. "
             + "There is no warranty. Original MIT grants and third-party licenses remain in effect. "
             + "Independently installed vendor converters have their own terms.");
     applicationLicense.setMaxWidth(700);
     contentBox.getChildren().add(applicationLicense);
+    contentBox.getChildren().add(FxLabels.newHyperlink(
+        () -> showLicense("jimzMLParser unknown license", "third-party/jimzMLParser-1.0.3-UNKNOWN.txt"),
+        "Read jimzMLParser unknown-license disclosure"));
     contentBox.getChildren().add(FxLabels.newHyperlink(
         () -> showLicense("GNU GPL version 3", "GPL-3.0.txt"), "Read GPL version 3"));
     contentBox.getChildren().add(FxLabels.newHyperlink(

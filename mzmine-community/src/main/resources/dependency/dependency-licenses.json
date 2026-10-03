@@ -74,6 +74,16 @@
             ]
         },
         {
+            "moduleName": "com.alanmrace:jimzmlparser",
+            "moduleVersion": "1.0.3",
+            "moduleLicenses": [
+                {
+                    "moduleLicense": "UNKNOWN / UNVERIFIED (owner acceptance 2026-10-03; no upstream grant)",
+                    "moduleLicenseUrl": "https://github.com/AurinVos/mzmine/blob/development/licenses/third-party/jimzMLParser-1.0.3-UNKNOWN.txt"
+                }
+            ]
+        },
+        {
             "moduleName": "com.beust:jcommander",
             "moduleVersion": "1.35",
             "moduleUrls": [
@@ -335,6 +345,19 @@
                 {
                     "moduleLicense": "Mozilla Public License Version 2.0",
                     "moduleLicenseUrl": "https://www.mozilla.org/en-US/MPL/2.0/"
+                }
+            ]
+        },
+        {
+            "moduleName": "com.github.luben:zstd-jni",
+            "moduleVersion": "1.3.4-10",
+            "moduleUrls": [
+                "https://github.com/luben/zstd-jni"
+            ],
+            "moduleLicenses": [
+                {
+                    "moduleLicense": "The 2-Clause BSD License",
+                    "moduleLicenseUrl": "https://opensource.org/licenses/BSD-2-Clause"
                 }
             ]
         },
@@ -1923,6 +1946,19 @@
             ]
         },
         {
+            "moduleName": "net.sf.py4j:py4j",
+            "moduleVersion": "0.8.1",
+            "moduleUrls": [
+                "http://py4j.sourceforge.net/"
+            ],
+            "moduleLicenses": [
+                {
+                    "moduleLicense": "The 3-Clause BSD License",
+                    "moduleLicenseUrl": "https://opensource.org/licenses/BSD-3-Clause"
+                }
+            ]
+        },
+        {
             "moduleName": "net.sf.trove4j:trove4j",
             "moduleVersion": "3.0.3",
             "moduleUrls": [
@@ -2801,6 +2837,19 @@
             ]
         },
         {
+            "moduleName": "org.lz4:lz4-java",
+            "moduleVersion": "1.4.1",
+            "moduleUrls": [
+                "https://github.com/lz4/lz4-java"
+            ],
+            "moduleLicenses": [
+                {
+                    "moduleLicense": "Apache License, Version 2.0",
+                    "moduleLicenseUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+                }
+            ]
+        },
+        {
             "moduleName": "org.openjfx:javafx-base",
             "moduleVersion": "26",
             "moduleLicenses": [
@@ -3489,6 +3538,19 @@
             ]
         },
         {
+            "moduleName": "org.tukaani:xz",
+            "moduleVersion": "1.6",
+            "moduleUrls": [
+                "http://tukaani.org/xz/java.html"
+            ],
+            "moduleLicenses": [
+                {
+                    "moduleLicense": "PUBLIC DOMAIN",
+                    "moduleLicenseUrl": ""
+                }
+            ]
+        },
+        {
             "moduleName": "org.xerial:sqlite-jdbc",
             "moduleVersion": "3.41.2.2",
             "moduleUrls": [
@@ -3506,6 +3568,19 @@
             "moduleVersion": "2.3",
             "moduleUrls": [
                 "https://bitbucket.org/snakeyaml/snakeyaml"
+            ],
+            "moduleLicenses": [
+                {
+                    "moduleLicense": "Apache License, Version 2.0",
+                    "moduleLicenseUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+                }
+            ]
+        },
+        {
+            "moduleName": "se.lth.immun:MsNumpress",
+            "moduleVersion": "0.1.18",
+            "moduleUrls": [
+                "https://github.com/ms-numpress/ms-numpress"
             ],
             "moduleLicenses": [
                 {

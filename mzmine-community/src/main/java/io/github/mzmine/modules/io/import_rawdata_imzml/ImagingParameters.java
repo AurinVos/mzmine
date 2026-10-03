@@ -25,6 +25,10 @@
 
 package io.github.mzmine.modules.io.import_rawdata_imzml;
 
+import com.alanmrace.jimzmlparser.imzml.ImzML;
+import com.alanmrace.jimzmlparser.mzml.CVParam;
+import com.alanmrace.jimzmlparser.mzml.ScanSettings;
+import com.alanmrace.jimzmlparser.mzml.ScanSettingsList;
 import io.github.mzmine.modules.io.import_rawdata_bruker_tdf.datamodel.sql.TDFMaldiFrameInfoTable;
 import io.github.mzmine.modules.io.import_rawdata_bruker_tdf.datamodel.sql.TDFMaldiFrameLaserInfoTable;
 import io.github.mzmine.modules.io.import_rawdata_bruker_tdf.datamodel.sql.TDFMetaDataTable;
@@ -125,6 +129,80 @@ public class ImagingParameters {
     pixelHeight = getLateralHeight() / getMaxNumberOfPixelY();*/
     pixelWidth = laserInfoTable.getSpotSizeColumn().get(0);
     pixelHeight = laserInfoTable.getSpotSizeColumn().get(0);
+  }
+
+  public ImagingParameters(ImzML imz) {
+    maxNumberOfPixelX = imz.getWidth();
+    maxNumberOfPixelY = imz.getHeight();
+    maxNumberOfPixelZ = imz.getDepth();
+    spectraPerPixel = imz.getNumberOfSpectraPerPixel();
+    minMZ = imz.getMinimumDetectedmz();
+    maxMZ = imz.getMaximumDetectedmz();
+    // Check scan settings first
+    ScanSettingsList scanSettingsList = imz.getScanSettingsList();
+
+    if (scanSettingsList != null) {
+      for (ScanSettings scanSettings : scanSettingsList) {
+        CVParam p = scanSettings.getCVParam(ScanSettings.MAX_DIMENSION_X_ID);
+        if (p != null) {
+          lateralWidth = p.getValueAsDouble();
+        }
+        p = scanSettings.getCVParam(ScanSettings.MAX_DIMENSION_Y_ID);
+        if (p != null) {
+          lateralHeight = p.getValueAsDouble();
+        }
+
+        p = scanSettings.getCVParam(ScanSettings.LINE_SCAN_DIRECTION_BOTTOM_UP_ID);
+        if (p != null) {
+          vStart = VerticalStart.BOTTOM;
+        } else {
+          vStart = VerticalStart.TOP;
+        }
+
+        p = scanSettings.getCVParam(ScanSettings.LINE_SCAN_DIRECTION_RIGHT_LEFT_ID);
+        if (p != null) {
+          hStart = HorizontalStart.RIGHT;
+        } else {
+          hStart = HorizontalStart.LEFT;
+        }
+
+        p = scanSettings.getCVParam(ScanSettings.PIXEL_AREA_ID);
+        if (p != null) {
+          pixelWidth = p.getValueAsDouble();
+        }
+        pixelHeight = pixelWidth;
+
+        p = scanSettings.getCVParam(ScanSettings.SCAN_PATTERN_MEANDERING_ID);
+        if (p != null) {
+          pattern = Pattern.MEANDER;
+        }
+        p = scanSettings.getCVParam(ScanSettings.SCAN_PATTERN_FLYBACK_ID);
+        if (p != null) {
+          pattern = Pattern.FLY_BACK;
+        }
+        p = scanSettings.getCVParam(ScanSettings.SCAN_PATTERN_RANDOM_ACCESS_ID);
+        if (p != null) {
+          pattern = Pattern.RANDOM;
+        }
+
+        p = scanSettings.getCVParam(ScanSettings.SCAN_TYPE_VERTICAL_ID);
+        if (p != null) {
+          scanDirection = ScanDirection.VERTICAL;
+        } else {
+          scanDirection = ScanDirection.HORIZONTAL;
+        }
+      }
+
+      if (Double.compare(lateralHeight, 0d) == 0) {
+        lateralHeight = maxNumberOfPixelY * pixelHeight;
+      }
+      if (Double.compare(lateralWidth, 0d) == 0) {
+        lateralWidth = maxNumberOfPixelX * pixelWidth;
+      }
+    }
+    if (pattern == null) {
+      pattern = Pattern.UNKNOWN;
+    }
   }
 
   public double getMinMZ() {

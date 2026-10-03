@@ -3,8 +3,13 @@ MZmine combined application distribution
 
 This combined application is distributed under the GNU General Public License,
 version 3 (GPL-3.0-only). The full license is in licenses/GPL-3.0.txt.
-You may run MZmine for any purpose, including commercial work. Private use and
-internal modifications do not require publishing source. Redistribution must
+MZmine's own code permits use for any purpose, including commercial work.
+jimzMLParser 1.0.3 has an UNKNOWN / UNVERIFIED license and is included by the
+repository owner's acceptance on 2026-10-03, not an upstream license grant.
+Commercial redistribution permission and GPL compatibility for this component
+have not been established. See licenses/REDISTRIBUTION.md and the bundled
+licenses/third-party/jimzMLParser-1.0.3-UNKNOWN.txt disclosure.
+Private use and internal modifications do not require publishing source. Redistribution must
 comply with the GPL, including its corresponding-source requirements.
 
 This distribution includes changes made on 2026-10-02 to remove restricted vendor

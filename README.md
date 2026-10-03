@@ -21,9 +21,11 @@ our [YouTube channel](https://www.youtube.com/@mzmineproject/playlists?view=1&so
 
 ## License
 
-This combined application is distributed under [GPL version 3](LICENSE.txt) and
-may be used for any purpose, including commercial work. Existing MIT grants and
-third-party notices are preserved. See [redistribution instructions](licenses/REDISTRIBUTION.md)
+This combined application is distributed under [GPL version 3](LICENSE.txt).
+The restored jimzMLParser 1.0.3 component has an **UNKNOWN / UNVERIFIED** license;
+the owner's acceptance does not establish an upstream grant or commercial
+redistribution permission. Existing MIT grants and third-party notices are
+preserved. See [redistribution instructions](licenses/REDISTRIBUTION.md)
 for source and release requirements.
 
 ## Releases

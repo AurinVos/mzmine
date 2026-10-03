@@ -128,12 +128,13 @@ public class ExtensionFilters {
   public static final ExtensionFilter MBI = new ExtensionFilter("MOBILion", "*.mbi");
 
   public static final ExtensionFilter ALL_MS_DATA_FILTER = new ExtensionFilter("MS data", "*.mzML",
-      "*.mzml", "*.mzXML", "*.mzxml", "*.d", "*.tdf", "*.tsf", "*.raw",
+      "*.mzml", "*.imzML", "*.imzml", "*.mzXML", "*.mzxml", "*.d", "*.tdf", "*.tsf", "*.raw",
       "*.RAW", "*.mzData", "*.netcdf", "*.mzdata", /*"*.aird",*/ "*.wiff", "*.wiff2", "*.lcd",
       "*.mbi");
   public static final List<ExtensionFilter> MS_RAW_DATA = List.of( //
       ALL_MS_DATA_FILTER, //
       MZML, //
+      IMZML, //
       MZXML, //
       THERMO_OR_WATERS_RAW, //
       BRUKER_OR_AGILENT_D, //

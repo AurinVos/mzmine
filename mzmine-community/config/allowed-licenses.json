@@ -1,6 +1,11 @@
 {
   "allowedLicenses": [
     {
+      "moduleName": "com.alanmrace:jimzmlparser",
+      "moduleVersion": "1.0.3",
+      "moduleLicense": "UNKNOWN / UNVERIFIED (owner acceptance 2026-10-03; no upstream grant)"
+    },
+    {
       "moduleLicense": "Mozilla Public License, Version 2.0"
     },
     {

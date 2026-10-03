@@ -26,7 +26,6 @@
 package import_data;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.condition.DisabledOnOs;
@@ -43,7 +42,6 @@ import org.junit.jupiter.api.condition.OS;
 //@TestMethodOrder(OrderAnnotation.class)
 //@Disabled
 @DisabledOnOs(OS.MAC)
-@Disabled("jimzML removed: exact artifact has no verified license grant; see ImzMLImportTaskTest")
 public class ImzMLImportTest extends AbstractDataImportTest {
 
   @Override

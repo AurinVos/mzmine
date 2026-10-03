@@ -12,7 +12,7 @@ import java.util.zip.ZipFile
 def forbiddenPayload = { String path ->
     def normalized = path.replace('\\', '/').toLowerCase(Locale.ROOT)
     normalized.tokenize('/').last() in ['mlreader.dll', 'libmlreader.so'] || normalized.matches('.*(thermo_raw_file_parser|thermorawfileparser|thermofisher|' +
-            'timsdata|baf2sql|wiff2launcher|masslynxraw|jimzmlparser|' +
+            'timsdata|baf2sql|wiff2launcher|masslynxraw|jimzmlparser-(?!1\\.0\\.3\\.jar$).*\\.jar|' +
             'grpc-netty-shaded|netty-tcnative|colt-1\\.|jcip-annotations|' +
             'junit-4\\.|json-20211205|cdk-.*-snapshot).*')
 }
@@ -42,6 +42,13 @@ tasks.register('verifyDistributionContents') {
         if (forbidden) throw new GradleException("Removed payloads found in image: ${forbidden}")
         def notices = fileTree(image) { include '**/external_tools/licenses/GPL-3.0.txt' }
         if (notices.isEmpty()) throw new GradleException('GPL license text missing from image')
+        // The exact parser is an owner-accepted unknown-license exception, not a verified grant.
+        def parserNotices = fileTree(image) {
+            include '**/external_tools/licenses/third-party/jimzMLParser-1.0.3-UNKNOWN.txt'
+        }
+        if (parserNotices.isEmpty() || parserNotices.any { !it.text.contains('UNKNOWN / UNVERIFIED') }) {
+            throw new GradleException('jimzMLParser unknown-license disclosure missing from image')
+        }
         def expected = (configurations.runtimeClasspath.files + tasks.named('jar').get().archiveFile.get().asFile)
                 .findAll { it.name.endsWith('.jar') }.collectEntries { [(it.name): it] }
         def packaged = fileTree(image) { include '**/app/*.jar' }.files.collectEntries { [(it.name): it] }
@@ -313,7 +320,7 @@ tasks.named('jpackage') {
 }
 tasks.register('freeUsePortable', Zip) {
     group = 'distribution'
-    description = 'Builds the verified portable application; publish with its matching source archive.'
+    description = 'Builds the portable application with sources and the accepted jimzMLParser unknown-license disclosure.'
     dependsOn('verifyDistributionContents', 'correspondingSourceArchive')
     archiveFileName = "mzmine-${project.version}-${project.ext.osSuffix}-free-use-portable.zip"
     destinationDirectory = layout.buildDirectory.dir('distributions')

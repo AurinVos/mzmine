@@ -1,5 +1,6 @@
 {
   "bundles" : [
+    { "bundleName" : "jimzMLParser-UNKNOWN", "licenseName" : "UNKNOWN / UNVERIFIED (owner acceptance 2026-10-03; no upstream grant)", "licenseUrl" : "https://github.com/AurinVos/mzmine/blob/development/licenses/third-party/jimzMLParser-1.0.3-UNKNOWN.txt" },
     { "bundleName" : "Apache-1.1", "licenseName" : "Apache Software License, Version 1.1", "licenseUrl" : "https://www.apache.org/licenses/LICENSE-1.1" },
     { "bundleName" : "JDOM", "licenseName" : "JDOM License", "licenseUrl" : "https://www.jdom.org/docs/faq.html" },
     { "bundleName" : "Apache-2.0", "licenseName" : "Apache License, Version 2.0", "licenseUrl" : "https://www.apache.org/licenses/LICENSE-2.0" },
@@ -27,6 +28,7 @@
     { "bundleName" : "Public-Domain", "licenseName" : "PUBLIC DOMAIN", "licenseUrl" : "" }
   ],
   "transformationRules" : [
+    { "bundleName" : "jimzMLParser-UNKNOWN", "modulePattern" : "com\\.alanmrace:jimzmlparser:1\\.0\\.3" },
     { "bundleName" : "LGPL-2.1-or-later", "licenseNamePattern" : "GNU LGPL 2\\.1 or later" },
     { "bundleName" : "LGPL-2.1-or-later", "licenseNamePattern" : "GNU Lesser General Public License.*2\\.1.*or later" },
     { "bundleName" : "LGPL-2.1-or-later", "modulePattern" : "org\\.jfree:jfreechart:1\\.5\\.3" },

@@ -1,4 +1,4 @@
-name: Freely usable Windows package
+name: Windows package with sources and license disclosures
 on:
   workflow_dispatch:
 

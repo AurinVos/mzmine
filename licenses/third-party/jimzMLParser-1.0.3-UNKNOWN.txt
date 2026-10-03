@@ -1,0 +1,19 @@
+jimzMLParser 1.0.3 -- UNKNOWN / UNVERIFIED license
+Artifact: com.alanmrace:jimzmlparser:1.0.3
+Upstream: https://github.com/AlanRace/jimzMLParser
+
+On 2026-10-03 the repository owner accepted using this exact parser despite
+its unresolved license status. This acceptance is not an upstream license grant.
+No explicit grant was found in the published POM, binary JAR, source JAR or
+examined upstream history. Commercial use, modification, redistribution and
+GPL compatibility have not been established for this component. Do not label
+it MIT, GPL, public domain or verified for commercial redistribution.
+
+The build allows only this exact version as a documented exception. All other
+license, runtime, source and distribution checks remain active. The generated
+dependency inventories retain UNKNOWN / UNVERIFIED instead of excluding it.
+See docs/implementation-notes/imzml-parser-license-decision.md and
+licenses/REDISTRIBUTION.md in the corresponding source for the decision and evidence.
+
+Published source JAR SHA-256:
+0dc5cc9874bd6f99ce588c105dd9cfc89106fbd571ad6a214fb111cb52a0abd9

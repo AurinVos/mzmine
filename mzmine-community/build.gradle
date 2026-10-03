@@ -222,6 +222,9 @@ dependencies {
     implementation "de.isas.mztab:jmztabm-io:$jmzTabmVersion"
 
     implementation 'net.java.dev.jna:jna:$jnaVersion'
+    // Owner accepted this exact artifact's UNKNOWN / UNVERIFIED license on 2026-10-03.
+    // This is not an upstream grant; see licenses/third-party/jimzMLParser-1.0.3-UNKNOWN.txt.
+    implementation 'com.alanmrace:jimzmlparser:1.0.3'
     implementation "com.github.yannrichet:JMathPlot:1.0.1"
     implementation "de.jensd:fontawesomefx-fontawesome:4.7.0-9.1.2"
 }
@@ -872,7 +875,9 @@ tasks.register('verifyOpenRuntime') {
         def forbiddenArtifacts = configurations.runtimeClasspath.resolvedConfiguration
                 .resolvedArtifacts.findAll {
                     def id = it.moduleVersion.id
-                    id.group == 'io.mzio' || id.group == 'com.alanmrace' || id.group == 'junit' ||
+                    id.group == 'io.mzio' ||
+                            (id.group == 'com.alanmrace' && !(id.name == 'jimzmlparser' && id.version == '1.0.3')) ||
+                            id.group == 'junit' ||
                             id.group == 'colt' || id.group == 'net.jcip' || id.name == 'jjobs-core' || id.name == 'xmpcore' ||
                             id.name == 'grpc-netty-shaded' || id.name.startsWith('netty-tcnative') ||
                             (id.group == 'org.json' && id.version != '20240303') ||
